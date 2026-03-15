@@ -63,7 +63,7 @@ Configure os MCP servers no seu cliente incluindo o seguinte conteúdo no arquiv
 
 
 
-## Faça o deploy na AWS
+## Análise de decisão arquitetural
 
 - Acesse o Google Antigravity.
 - Acesse o painel Agent
@@ -228,19 +228,16 @@ AWS
 
 Forneça uma estrutura de diretórios como exemplo:
 
-infra/
-
-modules/
-
-network/\
-compute/\
-database/\
-registry/
-
-environments/
-
-dev/\
-prod/
+| monorepo
+|  infra/
+|    modules/
+|    network/\
+|    compute/\
+|    database/\
+|    registry/
+|    environments/
+|     dev/\
+|     prod/
 
 ------------------------------------------------------------------------
 
@@ -342,3 +339,62 @@ Evite:
 - Analise o documento gerado.
 - Registre a decisão arquitetural no documento gerado.
 - Crie um plano de implementação no documento gerado.
+
+
+## Faça o deploy na AWS
+
+
+- Acesse o Google Antigravity.
+- Acesse o painel Agent
+- Acione a opção Start a new conversation.
+- Priorize modelos com maior capacidade de processamento.
+- Execute o seguinte comando:
+
+```bash
+Crie os artefatos para uma primeira versão de migração para AWS, prioritariamente baseada no cenário 2.
+
+Ajustes
+
+## Serviços AWS a serem mantidos
+
+| Serviço | Uso |
+|---------|-----|
+| **ECS Fargate** | Orquestração de containers sem gerenciar EC2 |
+| **ECR** | Registry de imagens Docker |
+| **Secrets Manager** | Gerenciamento seguro de credenciais |
+| **CloudWatch** | Logs, métricas, alarmes e dashboards |
+| **IAM** | Roles e policies granulares por serviço |
+| **VPC** | Isolamento com subnets públicas, privadas e de dados |
+| **ALB** | Load balancer com roteamento por path, health checks |
+
+## Serviço a ser substituído
+
+### Serviço proposto
+| **RDS PostgreSQL t3.small** | Banco relacional Multi-AZ com failover automático |
+
+### Serviço a ser usado
+
+| **Amazon Aurora** | 
+
+## Serviços AWS que não devem ser usados nesta primeira versão
+
+| **S3** | Assets estáticos, imagens de produtos |
+| **CloudFront** | CDN para assets estáticos e cache de páginas |
+| **RDS PostgreSQL t3.small** | Banco relacional Multi-AZ com failover automático |
+| **Route 53** | DNS com health checks |
+| **ACM** | Certificados SSL/TLS gerenciados (auto-renovação) |
+
+
+
+## Resultado
+- Scripts Terraform
+- Ajustes no Github Actions
+```
+
+- Avalie o plano resultante e solicite os ajustes necessários.
+- Execute o plano.
+
+
+
+
+

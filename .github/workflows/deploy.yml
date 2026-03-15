@@ -1,9 +1,10 @@
 name: Deploy Next.js to Vercel
 
 on:
-  push:
-    branches:
-      - main
+  #push:
+  #  branches:
+  #    - main
+  workflow_dispatch: # Permite disparar manualmente
 
 jobs:
   quality-backend:
