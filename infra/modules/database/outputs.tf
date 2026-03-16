@@ -1,9 +1,7 @@
 output "db_instance_endpoint" {
-  description = "Endpoint da instancia RDS"
-  value       = aws_db_instance.postgres.endpoint
+  value = aws_db_instance.main.endpoint
 }
 
-output "database_name" {
-  value = aws_db_instance.postgres.db_name
+output "db_instance_address" {
+  value = aws_db_instance.main.address
 }
-

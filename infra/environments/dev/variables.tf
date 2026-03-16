@@ -1,42 +1,35 @@
 variable "aws_region" {
-  description = "Região da AWS"
+  description = "AWS region"
   type        = string
   default     = "us-east-1"
 }
 
-variable "project" {
-  description = "Nome do projeto"
+variable "project_name" {
+  description = "Name of the project"
   type        = string
   default     = "devai"
 }
 
 variable "environment" {
-  description = "Ambiente"
+  description = "Environment name"
   type        = string
   default     = "dev"
 }
 
-variable "availability_zones" {
-  description = "AZs para deploy"
-  type        = list(string)
-  default     = ["us-east-1a", "us-east-1b"]
+variable "db_name" {
+  description = "Name of the database"
+  type        = string
+  default     = "devai"
 }
 
-variable "db_master_username" {
-  type    = string
-  default = "postgres"
+variable "db_username" {
+  description = "Username for the database"
+  type        = string
+  default     = "postgres"
 }
 
-variable "db_master_password" {
-  type      = string
-  sensitive = true
-}
-
-variable "tags" {
-  type = map(string)
-  default = {
-    Project     = "DevAI"
-    Environment = "dev"
-    ManagedBy   = "Terraform"
-  }
+variable "db_password" {
+  description = "Password for the database"
+  type        = string
+  sensitive   = true
 }

@@ -21,6 +21,9 @@ export AWS_SESSION_TOKEN=[colocar o token de sessão]
 export AWS_DEFAULT_REGION=[colocar a região]
 ```
 
+- Inclua as variáveis também no arquivo .env, de forma que o agente consiga acessá-las.
+
+
 ## Configuração de MCP servers
 
 Configure os MCP servers no seu cliente incluindo o seguinte conteúdo no arquivo de configuração do seu cliente.
@@ -366,13 +369,11 @@ Ajustes
 | **IAM** | Roles e policies granulares por serviço |
 | **VPC** | Isolamento com subnets públicas, privadas e de dados |
 | **ALB** | Load balancer com roteamento por path, health checks |
-| **RDS PostgreSQL t3.small** | Banco relacional Multi-AZ com failover automático |
+| **RDS PostgreSQL t3.small** | Banco relacional Single-AZ |
 
 ## Serviços AWS que não devem ser usados nesta primeira versão
 
-| **S3** | Assets estáticos, imagens de produtos |
 | **CloudFront** | CDN para assets estáticos e cache de páginas |
-| **RDS PostgreSQL t3.small** | Banco relacional Multi-AZ com failover automático |
 | **Route 53** | DNS com health checks |
 | **ACM** | Certificados SSL/TLS gerenciados (auto-renovação) |
 
@@ -384,8 +385,9 @@ Ajustes
 
 ## Restrição
 
-Atentar que no AWS Learner Labs não é permitido criar roles.
-Deve ser usada sempre a role `LabRole.
+Use sempre a role `LabRole`. Não criar novas roles.
+Garanta que o RDS provisionado tenha uma versão de banco compatível com as versões disponíveis na região.
+Use o AWS S3 com controle de versões habilitado para gerenciar o estado no Terraform.
 ```
 
 - Avalie o plano resultante e solicite os ajustes necessários.

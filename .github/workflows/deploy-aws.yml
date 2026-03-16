@@ -8,11 +8,8 @@ on:
 
 env:
   AWS_REGION: ${{ secrets.AWS_REGION }}
-  ECR_REPOSITORY_FRONTEND: devai-frontend
-  ECR_REPOSITORY_BACKEND: devai-backend
-  ECS_SERVICE_FRONTEND: devai-frontend-service
-  ECS_SERVICE_BACKEND: devai-backend-service
-  ECS_CLUSTER: devai-cluster
+  PROJECT_NAME: devai
+  ENVIRONMENT: dev
 
 jobs:
   quality:
@@ -25,7 +22,7 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
-          node-version: '24'
+          node-version: '22'
           cache: 'npm'
 
       - name: Install dependencies
@@ -40,9 +37,46 @@ jobs:
       - name: Lint Frontend
         run: npm run lint --workspace=frontend
 
+  terraform:
+    name: Terraform Apply
+    needs: quality
+    runs-on: ubuntu-latest
+    env:
+      TF_VAR_db_password: ${{ secrets.DB_PASSWORD }}
+      TF_IN_AUTOMATION: true
+    defaults:
+      run:
+        working-directory: ./infra/environments/dev
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-session-token: ${{ secrets.AWS_SESSION_TOKEN }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+
+      - name: Terraform Init
+        run: terraform init
+
+      - name: Terraform Validate
+        run: terraform validate
+
+      - name: Terraform Plan
+        run: terraform plan -no-color
+
+      - name: Terraform Apply
+        run: terraform apply -auto-approve -no-color
+
   build-and-push:
     name: Build and Push to ECR
-    needs: quality
+    needs: [quality, terraform]
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -53,6 +87,7 @@ jobs:
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-session-token: ${{ secrets.AWS_SESSION_TOKEN }}
           aws-region: ${{ env.AWS_REGION }}
 
       - name: Login to Amazon ECR
@@ -65,11 +100,11 @@ jobs:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
           IMAGE_TAG: ${{ github.sha }}
         run: |
-          docker build -t $ECR_REGISTRY/$ECR_REPOSITORY_BACKEND:$IMAGE_TAG \
-                       -t $ECR_REGISTRY/$ECR_REPOSITORY_BACKEND:latest \
+          docker build -t $ECR_REGISTRY/${{ env.PROJECT_NAME }}-backend:$IMAGE_TAG \
+                       -t $ECR_REGISTRY/${{ env.PROJECT_NAME }}-backend:latest \
                        -f apps/backend/Dockerfile .
-          docker push $ECR_REGISTRY/$ECR_REPOSITORY_BACKEND:$IMAGE_TAG
-          docker push $ECR_REGISTRY/$ECR_REPOSITORY_BACKEND:latest
+          docker push $ECR_REGISTRY/${{ env.PROJECT_NAME }}-backend:$IMAGE_TAG
+          docker push $ECR_REGISTRY/${{ env.PROJECT_NAME }}-backend:latest
 
       # Frontend Build & Push
       - name: Build, tag, and push Frontend image to Amazon ECR
@@ -78,12 +113,12 @@ jobs:
           IMAGE_TAG: ${{ github.sha }}
           NEXT_PUBLIC_API_URL: ${{ secrets.NEXT_PUBLIC_API_URL }}
         run: |
-          docker build -t $ECR_REGISTRY/$ECR_REPOSITORY_FRONTEND:$IMAGE_TAG \
-                       -t $ECR_REGISTRY/$ECR_REPOSITORY_FRONTEND:latest \
+          docker build -t $ECR_REGISTRY/${{ env.PROJECT_NAME }}-frontend:$IMAGE_TAG \
+                       -t $ECR_REGISTRY/${{ env.PROJECT_NAME }}-frontend:latest \
                        --build-arg NEXT_PUBLIC_API_URL=$NEXT_PUBLIC_API_URL \
                        -f apps/frontend/Dockerfile .
-          docker push $ECR_REGISTRY/$ECR_REPOSITORY_FRONTEND:$IMAGE_TAG
-          docker push $ECR_REGISTRY/$ECR_REPOSITORY_FRONTEND:latest
+          docker push $ECR_REGISTRY/${{ env.PROJECT_NAME }}-frontend:$IMAGE_TAG
+          docker push $ECR_REGISTRY/${{ env.PROJECT_NAME }}-frontend:latest
 
   deploy:
     name: Deploy to ECS
@@ -95,12 +130,13 @@ jobs:
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-session-token: ${{ secrets.AWS_SESSION_TOKEN }}
           aws-region: ${{ env.AWS_REGION }}
 
       - name: Update ECS Backend Service
         run: |
-          aws ecs update-service --cluster $ECS_CLUSTER --service $ECS_SERVICE_BACKEND --force-new-deployment
+          aws ecs update-service --cluster ${{ env.PROJECT_NAME }}-cluster --service ${{ env.PROJECT_NAME }}-backend-service --force-new-deployment --region ${{ env.AWS_REGION }}
 
       - name: Update ECS Frontend Service
         run: |
-          aws ecs update-service --cluster $ECS_CLUSTER --service $ECS_SERVICE_FRONTEND --force-new-deployment
+          aws ecs update-service --cluster ${{ env.PROJECT_NAME }}-cluster --service ${{ env.PROJECT_NAME }}-frontend-service --force-new-deployment --region ${{ env.AWS_REGION }}

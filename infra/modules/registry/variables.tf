@@ -1,10 +1,9 @@
-variable "project" {
-  description = "Nome do projeto"
+variable "project_name" {
+  description = "Name of the project"
   type        = string
 }
 
-variable "tags" {
-  description = "Tags globais"
-  type        = map(string)
-  default     = {}
+variable "environment" {
+  description = "Environment name"
+  type        = string
 }

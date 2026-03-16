@@ -1,25 +1,24 @@
-variable "project" {
-  description = "Nome do projeto"
+variable "project_name" {
+  description = "Name of the project"
+  type        = string
+}
+
+variable "environment" {
+  description = "Environment name"
   type        = string
 }
 
 variable "vpc_id" {
-  description = "ID da VPC"
+  description = "VPC ID"
   type        = string
 }
 
-variable "public_subnet_ids" {
-  description = "IDs das subnets públicas para o ALB"
+variable "public_subnets" {
+  description = "List of public subnet IDs"
   type        = list(string)
 }
 
 variable "security_group_id" {
-  description = "ID do Security Group do ALB"
+  description = "Security group ID for the ALB"
   type        = string
-}
-
-variable "tags" {
-  description = "Tags globais"
-  type        = map(string)
-  default     = {}
 }
