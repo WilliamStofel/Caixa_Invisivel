@@ -7,7 +7,7 @@ terraform {
   }
 
   backend "s3" {
-    bucket  = "devai-terraform-state"
+    # bucket passed via -backend-config in GitHub Actions
     key     = "dev/terraform.tfstate"
     region  = "us-east-1"
     encrypt = true

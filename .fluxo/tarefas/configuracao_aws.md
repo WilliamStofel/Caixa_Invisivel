@@ -387,7 +387,9 @@ Ajustes
 
 Use sempre a role `LabRole`. Não criar novas roles.
 Garanta que o RDS provisionado tenha uma versão de banco compatível com as versões disponíveis na região.
-Use o AWS S3 com controle de versões habilitado para gerenciar o estado no Terraform.
+Use o AWS S3 com backend para controle de versões habilitado para gerenciar o estado no Terraform.
+Garanta que o bucket do S3 de backend seja criado antes da execução do Terraform.
+Garanta que o bucket do S3 de backend seja criado na região padrão para os demais recursos.
 ```
 
 - Avalie o plano resultante e solicite os ajustes necessários.

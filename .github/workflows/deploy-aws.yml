@@ -7,9 +7,16 @@ on:
   workflow_dispatch: # Permite disparar manualmente
 
 env:
-  AWS_REGION: ${{ secrets.AWS_REGION }}
   PROJECT_NAME: devai
   ENVIRONMENT: dev
+  BACKEND_BUCKET: ${{ vars.BACKEND_BUCKET }}
+  AUTOMATION: true
+  DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+  NEXT_PUBLIC_API_URL: ${{ secrets.NEXT_PUBLIC_API_URL }}
+  AWS_REGION: ${{ secrets.AWS_REGION }}
+  AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+  AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+  AWS_SESSION_TOKEN: ${{ secrets.AWS_SESSION_TOKEN }}
 
 jobs:
   quality:
@@ -44,9 +51,6 @@ jobs:
     name: Terraform Apply
     needs: quality
     runs-on: ubuntu-latest
-    env:
-      TF_VAR_db_password: ${{ secrets.DB_PASSWORD }}
-      TF_IN_AUTOMATION: true
     defaults:
       run:
         working-directory: ./infra/environments/dev
@@ -54,19 +58,31 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v4
-        with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-session-token: ${{ secrets.AWS_SESSION_TOKEN }}
-          aws-region: ${{ env.AWS_REGION }}
+      # - name: Configure AWS credentials
+      #   uses: aws-actions/configure-aws-credentials@v4
+        # with:
+        #   aws-access-key-id: ${{ env.AWS_ACCESS_KEY_ID }}
+        #   aws-secret-access-key: ${{ env.AWS_SECRET_ACCESS_KEY }}
+        #   aws-session-token: ${{ env.AWS_SESSION_TOKEN }}
+        #   aws-region: ${{ env.AWS_REGION }}
 
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v3
 
+      - name: Ensure Terraform State Bucket
+        run: |
+          BUCKET_NAME="${{ env.BACKEND_BUCKET }}"
+          if ! aws s3api head-bucket --bucket "$BUCKET_NAME" 2>/dev/null; then
+            echo "Bucket $BUCKET_NAME not found. Creating in us-east-1..."
+            aws s3api create-bucket --bucket "$BUCKET_NAME" --region us-east-1
+            aws s3api put-bucket-versioning --bucket "$BUCKET_NAME" --versioning-configuration Status=Enabled
+            aws s3api put-bucket-encryption --bucket "$BUCKET_NAME" --server-side-encryption-configuration '{"Rules": [{"ApplyServerSideEncryptionByDefault": {"SSEAlgorithm": "AES256"}}]}'
+          else
+            echo "Bucket $BUCKET_NAME already exists."
+          fi
+
       - name: Terraform Init
-        run: terraform init
+        run: terraform init -backend-config="bucket=${{ env.BACKEND_BUCKET }}"
 
       - name: Terraform Validate
         run: terraform validate
@@ -85,13 +101,13 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v4
-        with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-session-token: ${{ secrets.AWS_SESSION_TOKEN }}
-          aws-region: ${{ env.AWS_REGION }}
+      # - name: Configure AWS credentials
+      #   uses: aws-actions/configure-aws-credentials@v4
+      #   with:
+      #     aws-access-key-id: ${{ env.AWS_ACCESS_KEY_ID }}
+      #     aws-secret-access-key: ${{ env.AWS_SECRET_ACCESS_KEY }}
+      #     aws-session-token: ${{ env.AWS_SESSION_TOKEN }}
+      #     aws-region: ${{ env.AWS_REGION }}
 
       - name: Login to Amazon ECR
         id: login-ecr
@@ -99,42 +115,35 @@ jobs:
 
       # Backend Build & Push
       - name: Build, tag, and push Backend image to Amazon ECR
-        env:
-          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-          IMAGE_TAG: ${{ github.sha }}
         run: |
-          docker build -t $ECR_REGISTRY/${{ env.PROJECT_NAME }}-backend:$IMAGE_TAG \
-                       -t $ECR_REGISTRY/${{ env.PROJECT_NAME }}-backend:latest \
+          docker build -t ${{ steps.login-ecr.outputs.registry }}/${{ env.PROJECT_NAME }}-backend:${{ github.sha }} \
+                       -t ${{ steps.login-ecr.outputs.registry }}/${{ env.PROJECT_NAME }}-backend:latest \
                        -f apps/backend/Dockerfile .
-          docker push $ECR_REGISTRY/${{ env.PROJECT_NAME }}-backend:$IMAGE_TAG
-          docker push $ECR_REGISTRY/${{ env.PROJECT_NAME }}-backend:latest
+          docker push ${{ steps.login-ecr.outputs.registry }}/${{ env.PROJECT_NAME }}-backend:${{ github.sha }}
+          docker push ${{ steps.login-ecr.outputs.registry }}/${{ env.PROJECT_NAME }}-backend:latest
 
       # Frontend Build & Push
       - name: Build, tag, and push Frontend image to Amazon ECR
-        env:
-          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-          IMAGE_TAG: ${{ github.sha }}
-          NEXT_PUBLIC_API_URL: ${{ secrets.NEXT_PUBLIC_API_URL }}
         run: |
-          docker build -t $ECR_REGISTRY/${{ env.PROJECT_NAME }}-frontend:$IMAGE_TAG \
-                       -t $ECR_REGISTRY/${{ env.PROJECT_NAME }}-frontend:latest \
-                       --build-arg NEXT_PUBLIC_API_URL=$NEXT_PUBLIC_API_URL \
+          docker build -t ${{ steps.login-ecr.outputs.registry }}/${{ env.PROJECT_NAME }}-frontend:${{ github.sha }} \
+                       -t ${{ steps.login-ecr.outputs.registry }}/${{ env.PROJECT_NAME }}-frontend:latest \
+                       --build-arg NEXT_PUBLIC_API_URL=${{ env.NEXT_PUBLIC_API_URL }} \
                        -f apps/frontend/Dockerfile .
-          docker push $ECR_REGISTRY/${{ env.PROJECT_NAME }}-frontend:$IMAGE_TAG
-          docker push $ECR_REGISTRY/${{ env.PROJECT_NAME }}-frontend:latest
+          docker push ${{ steps.login-ecr.outputs.registry }}/${{ env.PROJECT_NAME }}-frontend:${{ github.sha }}
+          docker push ${{ steps.login-ecr.outputs.registry }}/${{ env.PROJECT_NAME }}-frontend:latest
 
   deploy:
     name: Deploy to ECS
     needs: build-and-push
     runs-on: ubuntu-latest
     steps:
-      - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v4
-        with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-session-token: ${{ secrets.AWS_SESSION_TOKEN }}
-          aws-region: ${{ env.AWS_REGION }}
+      # - name: Configure AWS credentials
+      #   uses: aws-actions/configure-aws-credentials@v4
+      #   with:
+      #     aws-access-key-id: ${{ env.AWS_ACCESS_KEY_ID }}
+      #     aws-secret-access-key: ${{ env.AWS_SECRET_ACCESS_KEY }}
+      #     aws-session-token: ${{ env.AWS_SESSION_TOKEN }}
+      #     aws-region: ${{ env.AWS_REGION }}
 
       - name: Update ECS Backend Service
         run: |
