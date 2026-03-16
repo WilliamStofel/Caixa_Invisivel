@@ -31,6 +31,9 @@ jobs:
       - name: Lint Backend
         run: npm run lint --workspace=backend
 
+      - name: Gerar schema
+        run: npm run prisma:generate --workspace=backend
+
       - name: Test Backend
         run: npm run test --workspace=backend
 

@@ -8,9 +8,11 @@ export class PrismaService extends PrismaClient implements OnModuleInit {
   constructor() {
     const pool = new Pool({
       connectionString: process.env.DATABASE_URL,
-      ssl: process.env.DATABASE_URL?.includes('supabase.com') || process.env.DATABASE_URL?.includes('neon.tech') 
-        ? { rejectUnauthorized: false } 
-        : false,
+      ssl:
+        process.env.DATABASE_URL?.includes('supabase.com') ||
+        process.env.DATABASE_URL?.includes('neon.tech')
+          ? { rejectUnauthorized: false }
+          : false,
     });
     const adapter = new PrismaPg(pool);
 
