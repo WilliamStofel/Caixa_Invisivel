@@ -9,6 +9,7 @@ import { MobileMenu } from "@/components/layout/MobileMenu";
 import { useCart } from "@/lib/CartContext";
 import { useAuthMe } from "@/hooks/useAuthMe";
 import { useInternalAuth } from "@/hooks/AuthContext";
+import { UserDropdown } from "@/components/layout/UserDropdown";
 
 export function Header() {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -88,26 +89,11 @@ export function Header() {
                             <span className="sr-only">Login</span>
                         </Link>
                     ) : (
-                        <div className="flex items-center gap-4">
-                            {isAdmin && (
-                                <Link href="/admin" className="text-sm font-medium hover:text-primary transition-colors">
-                                    Admin
-                                </Link>
-                            )}
-                            <button 
-                                onClick={() => logout()}
-                                className="text-sm font-medium text-slate-500 hover:text-red-500 transition-colors"
-                            >
-                                Sair
-                            </button>
-                            {authMe?.imageUrl ? (
-                                <img src={authMe.imageUrl} alt="User" className="w-8 h-8 rounded-full border border-slate-200" />
-                            ) : (
-                                <div className="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center border border-slate-200">
-                                    <User className="w-4 h-4 text-slate-500" />
-                                </div>
-                            )}
-                        </div>
+                        <UserDropdown 
+                          user={authMe} 
+                          isAdmin={isAdmin} 
+                          onLogout={logout} 
+                        />
                     )}
                 </div>
             </div>
