@@ -13,3 +13,7 @@ output "ecr_frontend_url" {
 output "ecr_backend_url" {
   value = module.registry.backend_repository_url
 }
+
+output "db_instance_address" {
+  value = module.database.db_instance_address
+}

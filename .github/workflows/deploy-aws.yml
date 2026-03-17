@@ -20,8 +20,28 @@ env:
   AWS_SESSION_TOKEN: ${{ secrets.AWS_SESSION_TOKEN }}
 
 jobs:
+  changes:
+    name: Check for Changes
+    runs-on: ubuntu-latest
+    outputs:
+      apps: ${{ steps.filter.outputs.apps }}
+      infra: ${{ steps.filter.outputs.infra }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - uses: dorny/paths-filter@v3
+        id: filter
+        with:
+          filters: |
+            apps:
+              - 'apps/**'
+            infra:
+              - 'infra/**'
+
   quality:
     name: Lint & Test
+    needs: changes
+    if: needs.changes.outputs.apps == 'true' || github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -50,7 +70,11 @@ jobs:
 
   terraform:
     name: Terraform Apply
-    needs: quality
+    needs: [changes, quality]
+    if: |
+      always() &&
+      (needs.changes.outputs.infra == 'true' || github.event_name == 'workflow_dispatch') &&
+      (needs.quality.result == 'success' || needs.quality.result == 'skipped')
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -136,7 +160,12 @@ jobs:
 
   build-and-push:
     name: Build and Push to ECR
-    needs: [quality, terraform]
+    needs: [changes, quality, terraform]
+    if: |
+      always() &&
+      (needs.changes.outputs.apps == 'true' || github.event_name == 'workflow_dispatch') &&
+      (needs.quality.result == 'success' || needs.quality.result == 'skipped') &&
+      (needs.terraform.result == 'success' || needs.terraform.result == 'skipped')
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -167,7 +196,12 @@ jobs:
 
   deploy:
     name: Deploy to ECS
-    needs: build-and-push
+    needs: [changes, build-and-push, terraform]
+    if: |
+      always() &&
+      (needs.changes.outputs.apps == 'true' || needs.changes.outputs.infra == 'true' || github.event_name == 'workflow_dispatch') &&
+      (needs.build-and-push.result == 'success' || needs.build-and-push.result == 'skipped') &&
+      (needs.terraform.result == 'success' || needs.terraform.result == 'skipped')
     runs-on: ubuntu-latest
     steps:
       - name: Update ECS Backend Service
