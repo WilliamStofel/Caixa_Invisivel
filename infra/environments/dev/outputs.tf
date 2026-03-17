@@ -17,3 +17,7 @@ output "ecr_backend_url" {
 output "db_instance_address" {
   value = module.database.db_instance_address
 }
+
+output "secret_arn" {
+  value = module.secrets.secret_arn
+}
