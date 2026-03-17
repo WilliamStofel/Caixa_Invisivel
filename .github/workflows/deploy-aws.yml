@@ -161,11 +161,11 @@ jobs:
   build-and-push:
     name: Build and Push to ECR
     needs: [changes, quality, terraform]
-    if: |
-      always() &&
-      (needs.changes.outputs.apps == 'true' || github.event_name == 'workflow_dispatch') &&
-      (needs.quality.result == 'success' || needs.quality.result == 'skipped') &&
-      (needs.terraform.result == 'success' || needs.terraform.result == 'skipped')
+    #if: |
+    #  always() &&
+    #  (needs.changes.outputs.apps == 'true' || github.event_name == 'workflow_dispatch') &&
+    #  (needs.quality.result == 'success' || needs.quality.result == 'skipped') &&
+    #  (needs.terraform.result == 'success' || needs.terraform.result == 'skipped')
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -197,11 +197,11 @@ jobs:
   deploy:
     name: Deploy to ECS
     needs: [changes, build-and-push, terraform]
-    if: |
-      always() &&
-      (needs.changes.outputs.apps == 'true' || needs.changes.outputs.infra == 'true' || github.event_name == 'workflow_dispatch') &&
-      (needs.build-and-push.result == 'success' || needs.build-and-push.result == 'skipped') &&
-      (needs.terraform.result == 'success' || needs.terraform.result == 'skipped')
+    # if: |
+    #   always() &&
+    #   (needs.changes.outputs.apps == 'true' || needs.changes.outputs.infra == 'true' || github.event_name == 'workflow_dispatch') &&
+    #   (needs.build-and-push.result == 'success' || needs.build-and-push.result == 'skipped') &&
+    #   (needs.terraform.result == 'success' || needs.terraform.result == 'skipped')
     runs-on: ubuntu-latest
     steps:
       - name: Update ECS Backend Service
