@@ -130,7 +130,11 @@ jobs:
         run: terraform plan -input=false -no-color
 
       - name: Terraform Apply
-        run: terraform apply -input=false -auto-approve -no-color
+        run: |
+          terraform apply -input=false -auto-approve -no-color \
+            -replace="module.compute.aws_ecs_task_definition.backend" \
+            -replace="module.compute.aws_ecs_task_definition.frontend"
+
 
       - name: Update AWS Secrets
         run: |
