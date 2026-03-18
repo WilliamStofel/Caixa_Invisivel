@@ -79,6 +79,8 @@ jobs:
     name: Terraform Apply
     #needs: [changes, quality]
     needs: [quality]
+    outputs:
+      alb_dns_name: ${{ steps.outputs.outputs.alb_dns_name }}
     # if: |
     #   always() &&
     #   (needs.changes.outputs.infra == 'true' || github.event_name == 'workflow_dispatch') &&
@@ -135,6 +137,12 @@ jobs:
             -replace="module.compute.aws_ecs_task_definition.backend" \
             -replace="module.compute.aws_ecs_task_definition.frontend"
 
+      - name: Set outputs
+        id: outputs
+        run: |
+          ALB_DNS=$(terraform output -raw alb_dns_name)
+          echo "alb_dns_name=$ALB_DNS" >> $GITHUB_OUTPUT
+
 
       - name: Update AWS Secrets
         run: |
@@ -151,7 +159,7 @@ jobs:
           # Construir variáveis
           DATABASE_URL="postgresql://postgres:${{ secrets.DB_PASSWORD }}@${DB_ADDRESS}:5432/devai?schema=public"
           DIRECT_URL="postgresql://postgres:${{ secrets.DB_PASSWORD }}@${DB_ADDRESS}:5432/devai?schema=public"
-          NEXT_PUBLIC_API_URL="http://${ALB_DNS}"
+          NEXT_PUBLIC_API_URL="http://${ALB_DNS}/api/v1"
           
           echo "Updating secrets in Secrets Manager..."
           echo "Secret ARN: $SECRET_ARN"
@@ -230,14 +238,12 @@ jobs:
         env:
           REGISTRY: ${{ steps.login-ecr.outputs.registry }}
           IMAGE: ${{ env.PROJECT_NAME }}-frontend
-        # run: |
-        #   docker build \
-        #     -t $REGISTRY/$IMAGE:${{ github.sha }} \
-        #     -t $REGISTRY/$IMAGE:latest \
-        #     -f apps/frontend/Dockerfile .
-        #   docker push --all-tags $REGISTRY/$IMAGE
+          ALB_DNS: ${{ needs.terraform.outputs.alb_dns_name }}
+          CLERK_PUB_KEY: ${{ secrets.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY }}
         run: |
           docker build \
+            --build-arg NEXT_PUBLIC_API_URL=http://$ALB_DNS/api/v1 \
+            --build-arg NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=$CLERK_PUB_KEY \
             -t $REGISTRY/$IMAGE:latest \
             -f apps/frontend/Dockerfile .
           docker push --all-tags $REGISTRY/$IMAGE
