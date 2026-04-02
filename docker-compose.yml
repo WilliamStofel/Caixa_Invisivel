@@ -1,72 +1,47 @@
 services:
   db:
     image: postgres:15-alpine
-    container_name: devai-db
-    restart: always
+    container_name: caixa-db
     environment:
-      POSTGRES_USER: ${POSTGRES_USER:-user}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-password}
-      POSTGRES_DB: ${POSTGRES_DB:-dbname}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
     ports:
       - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
     healthcheck:
-      test: [ "CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-user} -d ${POSTGRES_DB:-dbname}" ]
-      interval: 10s
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
+      interval: 5s
       timeout: 5s
       retries: 5
-    networks:
-      - app-network
 
   backend:
     build:
       context: .
       dockerfile: apps/backend/Dockerfile
-    container_name: backend
-    restart: always
+    container_name: caixa-backend
     environment:
-      BACKEND_PORT: ${BACKEND_PORT:-3001}
-      POSTGRES_USER: ${POSTGRES_USER:-user}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-password}
-      POSTGRES_DB: ${POSTGRES_DB:-dbname}
-      DATABASE_URL: postgresql://${POSTGRES_USER:-user}:${POSTGRES_PASSWORD:-password}@db:5432/${POSTGRES_DB:-dbname}
-      CLERK_SECRET_KEY: ${CLERK_SECRET_KEY}
-      CLERK_JWT_KEY: ${CLERK_JWT_KEY}
-      JWT_SECRET: ${JWT_SECRET}
-      NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY: ${NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY}
+      PORT: ${BACKEND_PORT}
+      DATABASE_URL: ${DATABASE_URL}
     ports:
-      - "${BACKEND_PORT:-3001}:${BACKEND_PORT:-3001}"
+      - "${BACKEND_PORT}:${BACKEND_PORT}"
     depends_on:
       db:
         condition: service_healthy
-    networks:
-      - app-network
 
   frontend:
     build:
       context: .
       dockerfile: apps/frontend/Dockerfile
-      args:
-        NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL:-http://localhost:3001/api/v1}
-    container_name: frontend
-    restart: always
+    container_name: caixa-frontend
     environment:
-      - BACKEND_PORT=${BACKEND_PORT:-3001}
-      - FRONTEND_PORT=${FRONTEND_PORT:-3000}
-      - NEXT_PUBLIC_API_URL=${NEXT_PUBLIC_API_URL:-http://localhost:3001/api/v1}
-      - INTERNAL_API_URL=http://backend:${BACKEND_PORT:-3001}/api/v1
+      PORT: ${FRONTEND_PORT}
+      NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL}
     ports:
-      - "${FRONTEND_PORT:-3000}:${FRONTEND_PORT:-3000}"
+      - "${FRONTEND_PORT}:${FRONTEND_PORT}"
     depends_on:
-      backend:
-        condition: service_started
-    networks:
-      - app-network
-
-networks:
-  app-network:
-    driver: bridge
+      - backend
 
 volumes:
   postgres_data:

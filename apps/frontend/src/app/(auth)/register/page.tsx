@@ -1,9 +1,5 @@
-import { RegisterForm } from "@/components/auth/RegisterForm";
+import { RegisterFormFinance } from "@/components/auth/RegisterFormFinance";
 
 export default function RegisterPage() {
-    return (
-        <div className="auth-page">
-            <RegisterForm />
-        </div>
-    );
+    return <RegisterFormFinance />;
 }

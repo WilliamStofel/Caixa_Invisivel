@@ -12,7 +12,7 @@ export default async function AdminLayout({
 }) {
     const cookieStore = await cookies();
     const token = cookieStore.get("devai_auth_token")?.value;
-    
+
     if (!token) {
         redirect("/login");
     }

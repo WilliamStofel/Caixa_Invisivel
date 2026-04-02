@@ -2,206 +2,160 @@
 
 ## Visão Geral Técnica
 
-Este documento descreve como os requisitos não funcionais do produto e-micro-commerce serão implementados, fornecendo diretrizes de arquitetura e stack tecnológica para desenvolvimento assistido por IA e implementação humana.
+Este documento define a arquitetura técnica do produto "Caixa Invisível", focado em um MVP funcional, alinhado rigorosamente à stack oficial e convenções do repositório (AGENTS.md).
+
+O objetivo é permitir a rápida construção, validação e demonstração do produto, mantendo a arquitetura de monorepo escalável e padronizada.
+
+Público-alvo:
+
+* Desenvolvedores iniciantes/intermediários
+* Ferramentas de desenvolvimento com IA (ex: Antigravity)
+* Projetos acadêmicos e MVPs
 
 ---
 
-## Domínios e Entidades
-
-### Domínio Catálogo
-
-#### Entidades
-
-- Categoria: Nome da Categoria, Ativo.
-- Produto: Nome do Produto, Categoria, Imagem, Descrição, Estoque, Ativo.
-
-### Domínio Pedidos
-
-#### Entidades
-
-- Pedido: Número do Pedido, Valor Total, Identificação do Cliente, Endereço de entrega, Status do Pedido, Data de pagamento, Método de pagamento.
-- Item de Pedido: Identificação do Pedido, Identificação do Produto, Preço Unitário, Quantidade.
-
-#### Detalhes
-
-- Status do Pedido: Novo, Pago, Preparação, Faturado, Despachado, Entregue, Cancelado.
-- Métodos de Pagamento: Cartão de Crédito, Cartão de Débito, Pix, Dinheiro.
-
-**Regras de Transição do Status do Pedido:**
-- `Novo` → `Cancelado` (permitido)
-- `Novo` → `Pago` → `Preparação` → `Faturado` → `Despachado` → `Entregue` (sequencial)
-- Qualquer estado (exceto `Entregue` e `Cancelado`) → `Cancelado` (permitido)
-
-
-### Domínio Clientes
-
-#### Entidades
-
-- Cliente: Nome do cliente, Endereço, e-mail, Telefone, Ativo.
-
 ## Arquitetura de Referência
 
-- **Estilo arquitetural:** aplicação web com backend desacoplado via APIs RESTful.
-- **Componentes principais:** Frontend Web, Backend de Aplicação e Banco de Dados.
-- **Serviço de observabilidade:** aderente ao padrão OpenTelemetry (backend e frontend).
-- **Serviço de segurança:** aderente aos padrões OpenID Connect e OAuth 2.0.
-- **Comunicação:** HTTP/HTTPS com payloads JSON.
-- **Infraestrutura:** utilização de contêineres no padrão OCI.
+**Estilo arquitetural:**
+
+* Arquitetura em Monorepo estruturada com npm workspaces (`apps/frontend`, `apps/backend`).
+* Backend Desacoplado servindo APIs RESTful.
+
+**Componentes principais:**
+
+* **Frontend:** Aplicação Web com Server Components e Client Components em Next.js (App Router).
+* **Backend:** Microsserviço monolith modular (Feature Modules) em NestJS.
+* **Banco de dados:** PostgreSQL relacional.
+
+**Observabilidade:**
+
+* Logs estruturados no Backend (NestJS Logger).
+* Monitoramento nativo da plataforma de deploy (Vercel).
+
+**Autenticação e autorização:**
+
+* **Clerk Auth:** Gestão unificada de Identidade e Sessão.
+
+**Protocolos de Comunicação:**
+
+* HTTP/HTTPS via chamadas REST (JSON).
+
+**Infraestrutura de deployment:**
+
+* Frontend: Vercel ou AWS.
+* Backend: Serviço gerenciado (ex: Render, AWS, ou Vercel Serverless caso compatível).
+* Banco de Dados: Instância gerenciada (Supabase PostgreSQL ou Neon).
 
 ---
 
 ## Stack Tecnológica
 
-### Frontend
+### Frontend (`apps/frontend`)
 
-- **Linguagem**: TypeScript
-- **Framework web**: Next.js 16+ (App Router)
-- **EStilização**: Vanila CSS
+* **Linguagem**: TypeScript
+* **Framework web**: Next.js 16+ (App Router), React 19
+* **Bibliotecas**: Lucide React, clsx
+* **Estilização**: Vanilla CSS (usando varíaveis do Design System predefinido, **sem** TailwindCSS)
 
-### Backend
+---
 
-- **Linguagem**: TypeScript
-- **Runtime**: Node 24+
-- **Framework**: NestJS 11+
-- **Persistência**: PostgreSQL 15+
-- **ORM**: Prisma 7+
+### Backend (`apps/backend`)
+
+* **Linguagem**: TypeScript
+* **Framework**: NestJS 11
+* **Banco de dados**: PostgreSQL
+* **ORM**: Prisma ORM
+* **Segurança**: DTOs validados via `class-validator` e `class-transformer` com `ValidationPipe`.
+
+---
 
 ### Stack de Desenvolvimento
 
-- **IDE:** Google Antigravity.
-- **Gerenciamento de pacotes:** npm 10+.
-- **Ambiente de desenvolvimento local:** Docker; Docker Compose.
-- **Infraestrutura como Código (IaC):** Terraform.
-- **Pipeline CI/CD:** GitHub Actions.
+* **IDE**: VS Code / Google Antigravity
+* **Gerenciamento de pacotes**: npm workspaces (dependências e scripts na raiz)
+* **Ambiente local (Front)**: `npm run dev:frontend`
+* **Ambiente local (Back)**: `npm run dev:backend`
+* **Infra local**: Docker Compose para subir banco PostgreSQL (opcional, pode usar URL remota DBaaS).
+
+---
 
 ### Integrações
 
-- **Persistência:** Supabase.
-- **Deployment:** Vercel.
-- **Segurança (autenticação e autorização):** Clerk.
-- **Observabilidade:** Grafana Cloud.
-
-### Integrações - Stack Futura
-
-- **Persistência:** AWS RDS PostgreSQL.
-- **Deployment:** AWS EKS.
-- **Segurança (autenticação e autorização):** AWS Cognito.
-- **Mensageria:** AWS SQS.
-- **Notificações:** AWS SES.
-- **Observabilidade:** AWS Cloudwatch.
+* **Persistência**: PostgreSQL
+* **Segurança (Autenticação)**: Clerk (Provider de Identidade, SDKs front/back)
 
 ---
 
-# Especificação Técnica: Segurança e Auditoria
+## Segurança
 
-Este documento define os padrões de implementação para os módulos de segurança e rastreabilidade do sistema. Deve ser utilizado como guia de contexto para geração de código, middlewares e esquemas de banco de dados.
+### Autenticação e Gestão de Sessão
 
----
-
-## Segurança e Autenticação
-
-### Gestão de Sessão (JWT & Cookies)
-
-- **Mecanismo:** JSON Web Token (JWT) com fluxo de **Refresh Token Rotation**.
-- **Algoritmo de Assinatura:** Obrigatório o uso de **RS256** (RSA Signature with SHA-256) ou **ES256** (ECDSA). Chaves privadas devem ser armazenadas em variáveis de ambiente seguras (KMS/Vault).
-- **Configuração de Tokens:**
-    * `access_token`: Expiração em **15 minutos**.
-    * `refresh_token`: Expiração em **7 dias**. A cada uso, um novo par de tokens deve ser emitido e o anterior invalidado no backend (Blacklist/Whitelist).
-- **Armazenamento (Client-side):** * Uso mandatório de **HttpOnly Cookies**.
-    * Flags obrigatórias: `Secure=true`, `SameSite=Strict`.
-- **Validação de Middleware:** Todo request para rotas protegidas deve validar:
-    * `sig`: Integridade da assinatura.
-    * `exp`: Validade temporal (Expiration).
-    * `iss`: Emissor confiável (Issuer).
-    * `aud`: Destinatário pretendido (Audience).
-
-
-
-### Proteção de Dados e Infraestrutura
-
-- **Hashing de Senhas:** Utilizar algoritmos resistentes a GPU (ex: **Argon2id** ou **bcrypt** com salt robusto).
-- **Camada de Transporte:** Comunicação exclusiva via **HTTPS (TLS 1.2+)**.
-- **Rate Limiting:** Limitação de tentativas por IP em endpoints sensíveis (`/login`, `/register`, `/forgot-password`).
-- **Prevenção de Injeção:** Proibido o uso de queries brutas (raw queries). Utilizar exclusivamente **Parameterized Queries** via ORM/Query Builder.
-- **Headers de Segurança:** Implementação de `Content-Security-Policy` (CSP), `X-Content-Type-Options: nosniff` e `Strict-Transport-Security` (HSTS).
+* O controle de sessão e emissão de tokens é delegado ao **Clerk**.
+* O Frontend utiliza os Hooks rápidos e componentes prontos do Clerk (`@clerk/nextjs`).
+* O Backend intercepta todas as chamadas em rotas protegidas validando o token JWT pelo guard customizado integrado ao SDK do Clerk (`@clerk/clerk-sdk-node`).
 
 ---
 
-### Controle de Acesso (RBAC & IDOR)
+### Controle de Acesso e Autorização
 
-- **Modelo de Autorização:** Baseado em funções (**Role-Based Access Control**). As permissões devem ser verificadas via Guards/Decorators antes da execução da lógica de negócio.
-- **Prevenção de IDOR (Insecure Direct Object Reference):** Validação de propriedade obrigatória. O sistema deve garantir que o `user_id` extraído do token JWT tenha permissão explícita para acessar ou modificar o recurso (ID) solicitado na requisição.
+* **Isolamento por Identidade:** Todas as requisições API extraem o `user_id` (sub) do token Clerk decodificado.
+* O NestJS garante em nível de serviço (Services) que o cliente atue exclusivamente nas entidades `transactions`, `alerts` e `insights` que correspondam ao seu `user_id`.
 
 ---
 
-### Auditoria e Observabilidade
+### Segurança de Dados e Transações
 
-#### Esquema de Banco de Dados
-
-Todas as tabelas do sistema devem conter os seguintes metadados de ciclo de vida:
-
-| Campo | Tipo | Descrição |
-| :--- | :--- | :--- |
-| `created_at` | `TIMESTAMP WITH TIME ZONE` | Data de criação (default: `now()`). |
-| `updated_at` | `TIMESTAMP WITH TIME ZONE` | Data da última modificação (atualizada via trigger). |
-
-### Log de Eventos de Dados
-
-Toda operação de mutação (Create, Update, Delete) em entidades críticas deve gerar um registro de auditoria.
-
-- **Estrutura do Registro de Auditoria:**
-    * **Usuário:** ID do ator da ação (recuperado do contexto da requisição).
-    * **Objeto:** Identificador da entidade e ID do registro afetado.
-    * **Ação:** Tipo da operação (ex: `UPDATE_USER_PROFILE`, `DELETE_ORDER`).
-    * **Payload (Diff):** Snapshot dos dados alterados (opcional, dependendo da criticidade).
-    * **Timestamp:** Data e hora exata da transação.
-- **Implementação:** Preferencialmente via Interceptors ou Hooks de Ciclo de Vida do ORM para garantir que a auditoria ocorra de forma transparente.
+* Validação rigorosa de todos os inputs utilizando DTOs tipados no Backend.
+* Interação via ORM Prisma para blindar a aplicação de SQL Injections nativamente.
+* Frontend não acessa o banco diretamente, apenas consome a API RESTful exposta pelo NestJS.
 
 ---
 
 ## APIs
 
-- Endpoint principal: (<https://api.dominio.com/v1/>).
-- Versionamento: URI path versioning (ex: /v1/products).
-- Padrão de nomenclatura: /v1/{resource}/{id}.
-- Autenticação: Bearer JWT no header `Authorization`.
-- Rate limiting: 100 requisições/minuto por IP, 1000 requisições/minuto por usuário autenticado.
-- CORS: Permitir apenas origens whitelist (domínios do tenant).
-- Endpoints públicos: vitrine, produtos ativos.
-- Endpoints protegidos: pedidos, gestão, dashboard.
+**Padrão:**
+
+* Endpoint principal: API RESTful sob rotas controladas pelo NestJS (ex: `/api/v1`).
+
+**Principais Domínios Modulares (NestJS Feature Modules):**
+
+* `users` (Integração de metadados do cadastro / webhook com Clerk opcional)
+* `transactions` (Lançamentos de despesas vinculados à categoria)
+* `alerts` (Regras de limitação cadastradas)
+* `insights` (Processamento numérico e geração de alertas para UX)
+
+**Operações principais (Exemplos):**
+
+* `POST /transactions` - Inserir gasto manual / classificar
+* `GET /transactions` - Listar filtro de extrato
+* `POST /alerts` - Configurar alvo orçamentário
+* `GET /insights` - Obter dados prontos para visualização no dashboard
 
 ---
 
 ## Tenancy
 
-- **Estratégia:** Banco de dados compartilhado com schema separado por tenant.
-- **Isolamento:** Cada tenant possui schema próprio (ex: `tenant_abc123`).
-- **Identificação:** Tenant ID extraído do subdomain (`tenant.dominio.com`) ou header `X-Tenant-ID`.
-- **Migrações:** Prisma migrations devem ser executadas para todos os schemas ativos.
+**Estratégia:**
 
-MVP mono-tenant com evolução planejada
+* Single-schema lógico (banco compartilhado multitenant no prisma), pautado pelo ID do usuário como elo de pertencimento (`user_id`).
+
+**Responsabilidade de Isolamento:**
+
+* Filtros `WHERE user_id = ?` automáticos via Service Layer do NestJS (nunca processar atualizações/vistas que ultrapassem esse limite).
 
 ---
 
 ## Diretrizes para Desenvolvimento Assistido por IA
 
-- Respeitar padrões definidos neste documento.
-- Gerar código compatível com a arquitetura descrita.
-- Seguir padrões de código do NestJS (controllers, services, repositories, DTOs).
-- Utilizar interceptors para tenant resolution e logging.
-- Implementar guards para autorização baseada em roles (Admin/Customer).
-- Utilizar transactions para operações que envolvem múltiplas tabelas (ex: criar pedido + itens).
-- Seguir princípios SOLID e Clean Architecture.
-- Documentar APIs com Swagger/OpenAPI.
-
---
-
-## 9. Evolução Futura
-
-- Upload de imagens via Storage (S3/R2) - *Atualmente apenas URL*.
-- Integração real com gateway de pagamentos (Stripe, Pagar.me).
-- Notificações por e-mail (SendGrid) e WhatsApp (Twilio).
-- Aplicativo mobile nativo (React Native/Flutter).
-- Relatórios avançados (exportação PDF/Excel).
-- Importação em massa de produtos (CSV/Excel).
-- Sistema de cupons e descontos..
+**Mandamentos (Aderência ao AGENTS.md):**
+1. **Frontend:**
+   * Usar convenção de grupos no Next.js `app/(auth)`, `app/(dashboard)`.
+   * Componentizar intensamente em `src/components`, jamais deixar lógica solta em pages.
+   * Não usar Tailwind, aplicar unicamente variáveis de Vanilla CSS (`globals.css`).
+2. **Backend:**
+   * Adotar Clean Architecture mitigada do NestJS. Manter separação de pasta por *Feature Module* (`src/modules/FEATURE`).
+   * Desacoplar regras de ORM dos Controllers; Controllers lidam com web HTTP, API delega o core ao Service, que consome o banco via Prisma.
+3. **Fluxo:**
+   * Garantir tipagem restrita do TypeScript, jamais suprimir erros.
+   * Obrigatório a injeção do Guard de validação lógica (Clerk JWKS) acima dos recursos logados.
+   * Sempre usar MCP `context7` se tiver dúvidas nas sintaxes atualizadas do NextJS 16 Cache ou NestJS 11.

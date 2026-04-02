@@ -1,5 +1,5 @@
 {
-  "name": "devai",
+  "name": "caixa-invisivel",
   "private": true,
   "workspaces": [
     "apps/*"

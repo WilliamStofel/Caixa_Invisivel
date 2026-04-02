@@ -1,0 +1,178 @@
+{
+  "project": {
+    "projectId": "",
+    "project_title": "Caixa Invisível",
+    "description": "Personal finance tracking application with minimal, clean UI",
+    "design_system": {
+      "primary_color": "#4F46E5",
+      "primary_name": "Indigo",
+      "success_color": "#10B981",
+      "success_name": "Green",
+      "error_color": "#EF4444",
+      "error_name": "Red",
+      "font_family": "Inter",
+      "style": "Minimal, clean, flat design",
+      "platform": "Mobile-first",
+      "border_radius": "8px"
+    },
+    "created_at": "",
+    "screens": [
+      {
+        "interface": "INT-01 Login",
+        "title": "Tela de Login",
+        "description": "Simple email/password login with quick access to registration",
+        "screenId": "",
+        "deviceType": "MOBILE",
+        "status": "pending",
+        "components": [
+          "Email input",
+          "Password input",
+          "Sign In button",
+          "Create Account link",
+          "Forgot Password link"
+        ],
+        "design_focus": "Speed and simplicity",
+        "stitch_url": ""
+      },
+      {
+        "interface": "INT-02 Register",
+        "title": "Cadastro de Usuário",
+        "description": "Quick signup form with minimal friction",
+        "screenId": "",
+        "deviceType": "MOBILE",
+        "status": "pending",
+        "components": [
+          "Name input",
+          "Email input",
+          "Password input",
+          "Create Account button",
+          "Already have account link"
+        ],
+        "design_focus": "Low friction, essential fields only",
+        "stitch_url": ""
+      },
+      {
+        "interface": "INT-03 Dashboard",
+        "title": "Dashboard Principal",
+        "description": "Main view showing financial status and quick actions",
+        "screenId": "",
+        "deviceType": "MOBILE",
+        "status": "pending",
+        "components": [
+          "User greeting",
+          "Monthly spending card",
+          "Status indicator (green/red)",
+          "Recent transactions list",
+          "Add expense button",
+          "Configure alerts link",
+          "View transactions link",
+          "View insights link"
+        ],
+        "design_focus": "5-second financial understanding",
+        "critical_colors": ["green for control", "red for alert"],
+        "stitch_url": ""
+      },
+      {
+        "interface": "INT-04 Transaction List",
+        "title": "Lista de Transações",
+        "description": "Scannable list of all transactions grouped by date",
+        "screenId": "",
+        "deviceType": "MOBILE",
+        "status": "pending",
+        "components": [
+          "Header with back button",
+          "Filter/Sort options",
+          "Transaction rows (date, category, amount)",
+          "Date section headers",
+          "Back to dashboard link"
+        ],
+        "design_focus": "Quick scanning and comprehension",
+        "organization": "By date, most recent first",
+        "stitch_url": ""
+      },
+      {
+        "interface": "INT-05 Alert Config",
+        "title": "Configuração de Alertas",
+        "description": "Simple form to set spending limits by category",
+        "screenId": "",
+        "deviceType": "MOBILE",
+        "status": "pending",
+        "components": [
+          "Header with back button",
+          "Category selector",
+          "Limit input field",
+          "Save alert button",
+          "Existing alerts list (optional)"
+        ],
+        "design_focus": "Simplicity, MVP-level functionality",
+        "note": "No complex rules, single limit per category",
+        "stitch_url": ""
+      },
+      {
+        "interface": "INT-06 Insights",
+        "title": "Tela de Insights",
+        "description": "Simple spending patterns and comparisons",
+        "screenId": "",
+        "deviceType": "MOBILE",
+        "status": "pending",
+        "components": [
+          "Header with back button",
+          "Insight cards with messages",
+          "Weekly comparison",
+          "Refresh insights button",
+          "Back to dashboard link"
+        ],
+        "design_focus": "Direct, non-technical language",
+        "tone": "Simple and actionable",
+        "example_insights": [
+          "You spent 30% more on delivery this week",
+          "Your groceries are on track"
+        ],
+        "stitch_url": ""
+      },
+      {
+        "interface": "INT-07 Add Manual Expense",
+        "title": "Adicionar Gasto Manual",
+        "description": "Fallback form to manually add expenses",
+        "screenId": "",
+        "deviceType": "MOBILE",
+        "status": "pending",
+        "components": [
+          "Amount input",
+          "Category dropdown",
+          "Date picker",
+          "Description input",
+          "Save button",
+          "Cancel link"
+        ],
+        "design_focus": "Speed and simplicity",
+        "required_fields": [
+          "Amount",
+          "Category",
+          "Date"
+        ],
+        "optional_fields": [
+          "Description"
+        ],
+        "stitch_url": ""
+      }
+    ],
+    "notes": {
+      "generation_process": "All prompts enhanced with design system context and UI/UX keywords",
+      "consistency": "All screens use the same design tokens for consistency",
+      "mobile_first": "All screens designed for mobile, responsive to desktop",
+      "next_steps": [
+        "Download generated HTML and screenshots",
+        "Create React components from the designs",
+        "Implement backend API integration",
+        "Set up authentication with Clerk",
+        "Deploy to Vercel"
+      ],
+      "related_docs": [
+        "docs/spec_ui.md - Original UI specification",
+        ".stitch/SETUP_CAIXA_INVISIVEL.md - Generation instructions",
+        ".stitch/PROMPTS_CAIXA_INVISIVEL.md - Detailed prompts"
+      ]
+    }
+  }
+}
