@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="pt-BR"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=Manrope:wght@700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "surface-container": "#1c2026",
+              "on-secondary-fixed-variant": "#00429c",
+              "on-primary-fixed-variant": "#4f00d0",
+              "on-primary-fixed": "#20005f",
+              "surface-tint": "#cdbdff",
+              "on-primary": "#370096",
+              "outline": "#948da2",
+              "secondary-fixed": "#d9e2ff",
+              "on-error": "#690005",
+              "primary-container": "#5d21df",
+              "surface-container-low": "#181c22",
+              "surface-dim": "#10141a",
+              "on-surface-variant": "#cbc3d9",
+              "primary-fixed": "#e8deff",
+              "inverse-on-surface": "#2d3137",
+              "surface-container-high": "#262a31",
+              "surface-container-highest": "#31353c",
+              "outline-variant": "#494456",
+              "on-tertiary": "#460283",
+              "on-tertiary-fixed": "#2a0053",
+              "secondary-container": "#06449e",
+              "on-secondary": "#002d6f",
+              "on-secondary-container": "#9ab7ff",
+              "inverse-primary": "#6833ea",
+              "on-primary-container": "#cebfff",
+              "error-container": "#93000a",
+              "error": "#ffb4ab",
+              "tertiary-container": "#6c37a9",
+              "inverse-surface": "#dfe2eb",
+              "background": "#10141a",
+              "primary": "#cdbdff",
+              "on-tertiary-container": "#dbbbff",
+              "primary-fixed-dim": "#cdbdff",
+              "surface-container-lowest": "#0a0e14",
+              "on-secondary-fixed": "#001945",
+              "on-background": "#dfe2eb",
+              "secondary": "#b0c6ff",
+              "surface": "#10141a",
+              "on-surface": "#dfe2eb",
+              "on-error-container": "#ffdad6",
+              "tertiary-fixed-dim": "#dab9ff",
+              "surface-variant": "#31353c",
+              "secondary-fixed-dim": "#b0c6ff",
+              "tertiary": "#dab9ff",
+              "on-tertiary-fixed-variant": "#5e289b",
+              "surface-bright": "#353940",
+              "tertiary-fixed": "#eedbff"
+            },
+            fontFamily: {
+              "headline": ["Manrope"],
+              "body": ["Inter"],
+              "label": ["Inter"]
+            },
+            borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+          },
+        },
+      }
+    </script>
+<style>
+      .material-symbols-outlined {
+        font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+      }
+      body {
+        background-color: #10141a;
+        font-family: 'Inter', sans-serif;
+      }
+    </style>
+</head>
+<body class="bg-surface min-h-screen flex items-center justify-center p-6 selection:bg-primary-container selection:text-on-primary-container">
+<!-- Background Decoration (The "Vault" Aesthetic) -->
+<div class="fixed inset-0 overflow-hidden pointer-events-none">
+<div class="absolute -top-[10%] -left-[10%] w-[40%] h-[40%] bg-primary/10 rounded-full blur-[120px]"></div>
+<div class="absolute -bottom-[10%] -right-[10%] w-[30%] h-[30%] bg-tertiary-container/10 rounded-full blur-[100px]"></div>
+</div>
+<!-- Auth Container -->
+<main class="relative w-full max-w-[1100px] grid md:grid-cols-2 bg-surface-container-low rounded-[2rem] overflow-hidden shadow-2xl">
+<!-- Left Side: Branding & Editorial Content -->
+<section class="hidden md:flex flex-col justify-between p-12 bg-surface-container-highest/30 backdrop-blur-sm border-r border-outline-variant/10">
+<div>
+<h1 class="font-headline font-black text-3xl tracking-tighter text-primary mb-2">Caixa Invisível</h1>
+<p class="text-on-surface-variant font-medium text-lg leading-snug">The Financial Vault.</p>
+</div>
+<div class="space-y-8">
+<div class="relative aspect-square w-full max-w-[320px] mx-auto group">
+<div class="absolute inset-0 bg-gradient-to-tr from-primary/20 to-transparent rounded-2xl"></div>
+<img alt="Abstração financeira" class="w-full h-full object-cover rounded-2xl mix-blend-luminosity opacity-80 group-hover:opacity-100 transition-opacity duration-700" data-alt="abstract digital geometric structures in deep purple and navy blue floating in a void with soft cinematic lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCa9q8KgOrG_qNEtmKy9liwuONfBlhUXgvBNrmSuVcLgCeiEEYBreCcwD8z3u5oCETo0xkDA5X2Vvb1YMJsZ_wNgF38sSyOM3OMg0McscYOCl82M_3RYUS-PDTQf2oouQVR9ZBEuZKOh1GHfcNrlbjQ443fU_fL-O4kR06_xsO18LcXkXK7Aw6OgRZTEJvsMtU7LPJpmBePgn47qEJuwQcuuR6EEWgyNUffv6IriPMTW4hTkFg-W08YmBxizXlK4kwLycYwCZFovmw"/>
+</div>
+<div class="space-y-4">
+<h2 class="font-headline text-4xl font-extrabold tracking-tight text-on-surface leading-tight">
+                        Privacidade <br/>como padrão.
+                    </h2>
+<p class="text-on-surface-variant max-w-sm text-base leading-relaxed">
+                        Sua jornada financeira protegida por camadas de criptografia e design focado em transparência absoluta.
+                    </p>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<div class="flex -space-x-3">
+<img alt="User 1" class="w-10 h-10 rounded-full border-2 border-surface-container-low" data-alt="professional portrait of a woman with minimalist lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBAFmkUFdI5vu1n5RT4_-5mgh6bCaVDd2NYs5e1WhEs6ebOaV3ikYtUSb6qI-_tH3-B5M0mIhnvgefktNqR8ZlVrrRMlnWz2VlfCSwUNTYJVWxcGH7UrUNu8qPP2ZzsCLZ1ZTjuHPIEvHU021a-qswwXIST2_-N0kynNNAQoXYLmArCa2thpa18muJMryRiMXnLUJvmjbHvYiL7Brvcz6kITKPvc7Sb_oj2xE0WUw_e6Fjcl5Syo3wURINbG7QSqqHZOKcYjjcRmx4"/>
+<img alt="User 2" class="w-10 h-10 rounded-full border-2 border-surface-container-low" data-alt="portrait of a man with clean studio background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAyQhFxF-UpdgjoO-T-7i35FJlbwzfrkehKt8S5vnVI1j4pK6qCkhGXxDQ9gRPd_23knvYEcUuIOFzG0NDEI4BlOht0S9f86JYWBUPXsPCx0cPxRw51T3r95P_YnkuVR003J8f-yN3woLGweB1DfpxxX2OllGBOPZlCE-AM_ITGqCm0Kz2OBYxLjThk_YTSjSda1qGZq-oEOJNd8chQ2ZKgqT4JDBfSCdIykGNdcxSR5aKIixAT2_c2-vBOJxgiHzOs3b18DzBnDSc"/>
+<img alt="User 3" class="w-10 h-10 rounded-full border-2 border-surface-container-low" data-alt="vibrant portrait of a woman smiling subtly" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAnDNISKJhgbc7ObsBPg5rMtvdkbsWjlNlCvgt12_vd16Mr64USXQIc9Ment0EbMJkiEBTfqtReju7118hZ5zMC1jtfgJ59pxjupPpcVfipucko1xkjvjWnTBdsRMJVX-TUj2XVftFc-B9J17ZeZJjt-stWtX-XvKs4TmVnj1XPnVSUBD05E2FDg6ts8-JrFAoPwbJWN1FvzMyRp84uWvj9C4CmAfRZiobcEBfampmmZntsPF9gT8WW4xs0tE812UXqr850uTjN55s"/>
+</div>
+<span class="text-xs font-label text-on-surface-variant">+2.4k investidores já entraram</span>
+</div>
+</section>
+<!-- Right Side: Registration Form -->
+<section class="flex flex-col justify-center p-8 md:p-16 bg-surface-container-low">
+<div class="max-w-md w-full mx-auto">
+<header class="mb-10">
+<div class="md:hidden mb-8">
+<span class="font-headline font-black text-2xl tracking-tighter text-primary">Caixa Invisível</span>
+</div>
+<h2 class="font-headline text-3xl font-bold text-on-surface mb-2">Criar nova conta</h2>
+<p class="text-on-surface-variant font-body">Inicie sua gestão patrimonial hoje.</p>
+</header>
+<form action="#" class="space-y-6" method="POST">
+<!-- Name Input -->
+<div class="space-y-2">
+<label class="block text-sm font-label font-medium text-on-surface-variant" for="name">Nome completo</label>
+<div class="relative group">
+<div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-outline">
+<span class="material-symbols-outlined text-[20px]">person</span>
+</div>
+<input class="block w-full pl-11 pr-4 py-4 bg-surface-container-highest border-none rounded-xl text-on-surface placeholder:text-outline/50 focus:ring-2 focus:ring-primary/40 transition-all outline-none" id="name" name="name" placeholder="Como quer ser chamado?" required="" type="text"/>
+</div>
+</div>
+<!-- Email Input -->
+<div class="space-y-2">
+<label class="block text-sm font-label font-medium text-on-surface-variant" for="email">Email profissional</label>
+<div class="relative group">
+<div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-outline">
+<span class="material-symbols-outlined text-[20px]">mail</span>
+</div>
+<input class="block w-full pl-11 pr-4 py-4 bg-surface-container-highest border-none rounded-xl text-on-surface placeholder:text-outline/50 focus:ring-2 focus:ring-primary/40 transition-all outline-none" id="email" name="email" placeholder="exemplo@vault.com" required="" type="email"/>
+</div>
+</div>
+<!-- Password Input -->
+<div class="space-y-2">
+<label class="block text-sm font-label font-medium text-on-surface-variant" for="password">Senha</label>
+<div class="relative group">
+<div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-outline">
+<span class="material-symbols-outlined text-[20px]">lock</span>
+</div>
+<input class="block w-full pl-11 pr-12 py-4 bg-surface-container-highest border-none rounded-xl text-on-surface placeholder:text-outline/50 focus:ring-2 focus:ring-primary/40 transition-all outline-none" id="password" name="password" placeholder="Mínimo 8 caracteres" required="" type="password"/>
+<button class="absolute inset-y-0 right-0 pr-4 flex items-center text-outline hover:text-primary transition-colors" type="button">
+<span class="material-symbols-outlined text-[20px]">visibility_off</span>
+</button>
+</div>
+<div class="flex gap-1 pt-1">
+<div class="h-1 flex-1 bg-surface-container-highest rounded-full overflow-hidden"><div class="h-full w-1/3 bg-error/40"></div></div>
+<div class="h-1 flex-1 bg-surface-container-highest rounded-full"></div>
+<div class="h-1 flex-1 bg-surface-container-highest rounded-full"></div>
+</div>
+</div>
+<!-- CTA Button -->
+<div class="pt-4">
+<button class="w-full py-4 px-6 bg-gradient-to-br from-primary to-primary-container text-on-primary font-headline font-bold text-lg rounded-xl shadow-lg shadow-primary/20 hover:scale-[1.02] active:scale-95 transition-all duration-200" type="submit">
+                            Criar conta
+                        </button>
+</div>
+</form>
+<!-- Footer Links -->
+<footer class="mt-10 text-center space-y-4">
+<p class="text-sm text-on-surface-variant font-body">
+                        Já tenho conta. <a class="text-primary font-bold hover:underline underline-offset-4 decoration-2 transition-all" href="#">Acessar cofre</a>
+</p>
+<div class="flex items-center justify-center gap-6 pt-6 border-t border-outline-variant/10">
+<p class="text-[10px] uppercase tracking-widest text-outline font-label">Segurança Bancária</p>
+<p class="text-[10px] uppercase tracking-widest text-outline font-label">LGPD Compliant</p>
+</div>
+</footer>
+</div>
+</section>
+</main>
+</body></html>

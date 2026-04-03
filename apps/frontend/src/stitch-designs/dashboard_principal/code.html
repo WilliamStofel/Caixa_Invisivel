@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="pt-BR"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "surface-container": "#1c2026",
+              "on-secondary-fixed-variant": "#00429c",
+              "on-primary-fixed-variant": "#4f00d0",
+              "on-primary-fixed": "#20005f",
+              "surface-tint": "#cdbdff",
+              "on-primary": "#370096",
+              "outline": "#948da2",
+              "secondary-fixed": "#d9e2ff",
+              "on-error": "#690005",
+              "primary-container": "#5d21df",
+              "surface-container-low": "#181c22",
+              "surface-dim": "#10141a",
+              "on-surface-variant": "#cbc3d9",
+              "primary-fixed": "#e8deff",
+              "inverse-on-surface": "#2d3137",
+              "surface-container-high": "#262a31",
+              "surface-container-highest": "#31353c",
+              "outline-variant": "#494456",
+              "on-tertiary": "#460283",
+              "on-tertiary-fixed": "#2a0053",
+              "secondary-container": "#06449e",
+              "on-secondary": "#002d6f",
+              "on-secondary-container": "#9ab7ff",
+              "inverse-primary": "#6833ea",
+              "on-primary-container": "#cebfff",
+              "error-container": "#93000a",
+              "error": "#ffb4ab",
+              "tertiary-container": "#6c37a9",
+              "inverse-surface": "#dfe2eb",
+              "background": "#10141a",
+              "primary": "#cdbdff",
+              "on-tertiary-container": "#dbbbff",
+              "primary-fixed-dim": "#cdbdff",
+              "surface-container-lowest": "#0a0e14",
+              "on-secondary-fixed": "#001945",
+              "on-background": "#dfe2eb",
+              "secondary": "#b0c6ff",
+              "surface": "#10141a",
+              "on-surface": "#dfe2eb",
+              "on-error-container": "#ffdad6",
+              "tertiary-fixed-dim": "#dab9ff",
+              "surface-variant": "#31353c",
+              "secondary-fixed-dim": "#b0c6ff",
+              "tertiary": "#dab9ff",
+              "on-tertiary-fixed-variant": "#5e289b",
+              "surface-bright": "#353940",
+              "tertiary-fixed": "#eedbff"
+            },
+            fontFamily: {
+              "headline": ["Manrope"],
+              "body": ["Inter"],
+              "label": ["Inter"]
+            },
+            borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+          },
+        },
+      }
+    </script>
+<style>
+      .material-symbols-outlined {
+        font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+      }
+      body {
+        background-color: #10141a;
+        color: #dfe2eb;
+        font-family: 'Inter', sans-serif;
+      }
+      .neon-green {
+        color: #39FF14;
+        text-shadow: 0 0 10px rgba(57, 255, 20, 0.4);
+      }
+    </style>
+</head>
+<body class="bg-background text-on-surface antialiased">
+<!-- Sidebar Navigation -->
+<aside class="fixed left-0 top-0 h-full flex flex-col p-6 z-50 bg-[#10141a] w-64 font-['Manrope'] font-semibold tracking-tight">
+<div class="text-xl font-black text-[#cdbdff] mb-8">Caixa Invisível</div>
+<nav class="flex-1 space-y-2">
+<a class="flex items-center gap-3 px-4 py-3 text-[#cdbdff] bg-[#1c2026] rounded-xl transition-transform active:translate-x-1" href="#">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+                Painel
+            </a>
+<a class="flex items-center gap-3 px-4 py-3 text-slate-500 hover:text-slate-200 transition-all hover:bg-[#262a31]" href="#">
+<span class="material-symbols-outlined" data-icon="swap_horiz">swap_horiz</span>
+                Transações
+            </a>
+<a class="flex items-center gap-3 px-4 py-3 text-slate-500 hover:text-slate-200 transition-all hover:bg-[#262a31]" href="#">
+<span class="material-symbols-outlined" data-icon="pie_chart">pie_chart</span>
+                Orçamentos
+            </a>
+<a class="flex items-center gap-3 px-4 py-3 text-slate-500 hover:text-slate-200 transition-all hover:bg-[#262a31]" href="#">
+<span class="material-symbols-outlined" data-icon="insights">insights</span>
+                Insights
+            </a>
+<a class="flex items-center gap-3 px-4 py-3 text-slate-500 hover:text-slate-200 transition-all hover:bg-[#262a31]" href="#">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+                Configurações
+            </a>
+</nav>
+<button class="mt-4 w-full py-4 px-4 bg-gradient-to-br from-primary to-primary-container text-on-primary rounded-xl font-bold text-sm tracking-tight hover:opacity-90 transition-all active:scale-95">
+            Adicionar Transação
+        </button>
+<div class="mt-8 space-y-2">
+<a class="flex items-center gap-3 px-4 py-2 text-slate-500 hover:text-slate-200 transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="help_outline">help_outline</span>
+                Suporte
+            </a>
+<a class="flex items-center gap-3 px-4 py-2 text-slate-500 hover:text-slate-200 transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="logout">logout</span>
+                Sair
+            </a>
+</div>
+</aside>
+<!-- Main Content Area -->
+<main class="ml-64 min-h-screen">
+<!-- Top App Bar -->
+<header class="sticky top-0 w-full flex justify-between items-center px-8 h-20 z-40 bg-[#10141a]/70 backdrop-blur-xl no-border bg-[#1c2026]">
+<h1 class="font-['Manrope'] tracking-tighter font-bold text-2xl text-[#cdbdff]">Painel Principal</h1>
+<div class="flex items-center gap-6">
+<div class="flex items-center bg-surface-container-high px-4 py-2 rounded-full">
+<span class="material-symbols-outlined text-primary text-sm mr-2" data-icon="search">search</span>
+<input class="bg-transparent border-none focus:ring-0 text-sm w-48 text-on-surface" placeholder="Buscar..." type="text"/>
+</div>
+<div class="flex gap-4 items-center">
+<span class="material-symbols-outlined text-slate-400 hover:text-primary cursor-pointer transition-colors" data-icon="notifications">notifications</span>
+<span class="material-symbols-outlined text-slate-400 hover:text-primary cursor-pointer transition-colors" data-icon="account_balance_wallet">account_balance_wallet</span>
+<div class="w-10 h-10 rounded-full overflow-hidden border border-primary/20">
+<img alt="User profile avatar" data-alt="Close-up professional portrait of a man in dark clothing against a moody dark blue background with cinematic lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBXaJwwIu6pmt7RL0U8Im_zvEN7FK8u5c6trpFVr8f6A5fQCLMYSGECAGe35p7s34VUfraCa5wmANrT1wUokptm6P9LVIA3jzG7bC06xNlkhv44d_a3qhRyi3lBpt9K7sCSa6WmZa83xh432lKa8Gdq38mRktjRM3DjwPm6d4nWTfUbEoOVhkOb7v9WeSdFedlrIROfuc1_d6uH-sDDjN4-AGK6jquCQoKfzF7PnsEfh2dwBI6ViXLnm4ojNPxNiLzAKhthLzdlbvI"/>
+</div>
+</div>
+</div>
+</header>
+<!-- Content Canvas -->
+<div class="p-8 max-w-7xl mx-auto space-y-8">
+<!-- Hero Stats Grid -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+<!-- Main Balance Card -->
+<div class="md:col-span-2 bg-surface-container-low p-8 rounded-xl relative overflow-hidden flex flex-col justify-between min-h-[320px]">
+<div>
+<div class="flex justify-between items-start mb-4">
+<span class="text-on-surface-variant font-label text-sm uppercase tracking-widest font-semibold">Gasto Total Mensal</span>
+<span class="px-3 py-1 rounded-full bg-[#39FF14]/10 neon-green text-[10px] font-bold tracking-tighter border border-[#39FF14]/20">SOB CONTROLE</span>
+</div>
+<h2 class="font-headline text-6xl font-extrabold tracking-tighter text-on-surface mb-2">R$ 4.280,50</h2>
+<p class="text-on-surface-variant font-body text-lg">Seus gastos estão 28% abaixo da média do mês passado.</p>
+</div>
+<div class="space-y-4">
+<div class="flex justify-between items-end">
+<span class="text-sm font-label text-slate-400">Progresso do Limite: R$ 6.000,00</span>
+<span class="text-sm font-label text-primary font-bold">71%</span>
+</div>
+<div class="w-full h-3 bg-surface-container-highest rounded-full overflow-hidden">
+<div class="h-full bg-gradient-to-r from-primary-container to-primary rounded-full" style="width: 71%"></div>
+</div>
+</div>
+<!-- Abstract Background Texture -->
+<div class="absolute top-0 right-0 w-64 h-64 bg-primary/10 blur-[100px] -z-10 rounded-full"></div>
+</div>
+<!-- Action Cards -->
+<div class="flex flex-col gap-6">
+<button class="flex-1 bg-surface-container-high hover:bg-surface-bright p-6 rounded-xl text-left transition-all group flex flex-col justify-center">
+<span class="material-symbols-outlined text-primary text-3xl mb-4 group-hover:scale-110 transition-transform" data-icon="add_circle" data-weight="fill" style="font-variation-settings: 'FILL' 1;">add_circle</span>
+<span class="font-headline text-xl font-bold block">Adicionar gasto</span>
+<span class="text-slate-400 text-sm mt-1">Registre uma nova saída rápida</span>
+</button>
+<button class="flex-1 bg-surface-container-high hover:bg-surface-bright p-6 rounded-xl text-left transition-all group flex flex-col justify-center">
+<span class="material-symbols-outlined text-primary text-3xl mb-4 group-hover:scale-110 transition-transform" data-icon="notification_important">notification_important</span>
+<span class="font-headline text-xl font-bold block">Configurar alertas</span>
+<span class="text-slate-400 text-sm mt-1">Gerencie notificações de limite</span>
+</button>
+</div>
+</div>
+<!-- Transactions & Analytics Bento -->
+<div class="grid grid-cols-1 lg:grid-cols-5 gap-6">
+<!-- Recent Transactions List -->
+<div class="lg:col-span-3 bg-surface-container p-8 rounded-xl">
+<div class="flex justify-between items-center mb-8">
+<h3 class="font-headline text-2xl font-bold tracking-tight">Transações Recentes</h3>
+<a class="text-primary font-label text-sm font-semibold hover:underline" href="#">Ver todas</a>
+</div>
+<div class="space-y-6">
+<!-- Transaction Item -->
+<div class="flex items-center justify-between group cursor-pointer">
+<div class="flex items-center gap-4">
+<div class="w-12 h-12 rounded-xl bg-surface-container-high flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-on-primary transition-colors">
+<span class="material-symbols-outlined" data-icon="shopping_cart">shopping_cart</span>
+</div>
+<div>
+<h4 class="font-bold text-on-surface">Mercado Central</h4>
+<p class="text-slate-500 text-xs">Alimentação • Hoje, 14:20</p>
+</div>
+</div>
+<span class="font-headline font-bold text-lg text-error">- R$ 342,20</span>
+</div>
+<!-- Transaction Item -->
+<div class="flex items-center justify-between group cursor-pointer">
+<div class="flex items-center gap-4">
+<div class="w-12 h-12 rounded-xl bg-surface-container-high flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-on-primary transition-colors">
+<span class="material-symbols-outlined" data-icon="local_gas_station">local_gas_station</span>
+</div>
+<div>
+<h4 class="font-bold text-on-surface">Posto de Gasolina</h4>
+<p class="text-slate-500 text-xs">Transporte • Ontem</p>
+</div>
+</div>
+<span class="font-headline font-bold text-lg text-error">- R$ 215,00</span>
+</div>
+<!-- Transaction Item -->
+<div class="flex items-center justify-between group cursor-pointer">
+<div class="flex items-center gap-4">
+<div class="w-12 h-12 rounded-xl bg-surface-container-high flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-on-primary transition-colors">
+<span class="material-symbols-outlined" data-icon="home">home</span>
+</div>
+<div>
+<h4 class="font-bold text-on-surface">Aluguel</h4>
+<p class="text-slate-500 text-xs">Moradia • 05 Jun</p>
+</div>
+</div>
+<span class="font-headline font-bold text-lg text-error">- R$ 2.450,00</span>
+</div>
+</div>
+</div>
+<!-- Categorical Insights -->
+<div class="lg:col-span-2 bg-surface-container-low p-8 rounded-xl flex flex-col">
+<h3 class="font-headline text-2xl font-bold tracking-tight mb-6">Categorias</h3>
+<div class="flex-1 flex flex-col justify-center space-y-6">
+<div class="flex items-center gap-4">
+<div class="w-2 h-12 bg-primary rounded-full"></div>
+<div class="flex-1">
+<div class="flex justify-between text-sm mb-1">
+<span class="font-bold">Moradia</span>
+<span class="text-slate-400">57%</span>
+</div>
+<div class="h-1 bg-surface-container-highest rounded-full">
+<div class="h-full bg-primary" style="width: 57%"></div>
+</div>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<div class="w-2 h-12 bg-tertiary rounded-full"></div>
+<div class="flex-1">
+<div class="flex justify-between text-sm mb-1">
+<span class="font-bold">Alimentação</span>
+<span class="text-slate-400">22%</span>
+</div>
+<div class="h-1 bg-surface-container-highest rounded-full">
+<div class="h-full bg-tertiary" style="width: 22%"></div>
+</div>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<div class="w-2 h-12 bg-secondary rounded-full"></div>
+<div class="flex-1">
+<div class="flex justify-between text-sm mb-1">
+<span class="font-bold">Outros</span>
+<span class="text-slate-400">21%</span>
+</div>
+<div class="h-1 bg-surface-container-highest rounded-full">
+<div class="h-full bg-secondary" style="width: 21%"></div>
+</div>
+</div>
+</div>
+</div>
+<div class="mt-8 p-4 bg-surface-container-high rounded-xl border border-outline-variant/20">
+<p class="text-xs text-on-surface-variant leading-relaxed">
+<span class="font-bold text-primary">Dica Editorial:</span> Você economizou R$ 420,00 em lazer este mês. Considere investir esse valor em sua reserva de emergência.
+                        </p>
+</div>
+</div>
+</div>
+<!-- Footer Decorative Element -->
+<div class="w-full h-32 relative rounded-xl overflow-hidden bg-surface-container-highest flex items-center px-12">
+<div class="z-10">
+<p class="font-headline text-3xl font-black text-on-surface opacity-40">CAIXA INVISÍVEL</p>
+<p class="text-primary font-label text-sm font-bold tracking-[0.3em] mt-2">SECURE FINANCIAL VAULT</p>
+</div>
+<div class="absolute inset-0 bg-gradient-to-r from-transparent via-primary/5 to-primary/10"></div>
+<!-- Visual Grain Effect Simulation -->
+<div class="absolute inset-0 opacity-[0.03] pointer-events-none" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDUuLtgyQzmq4_u6MdxBAF5Zhz5ZM-cA8AXoWgLvxx42bjYwoiRYunmlC_UERgFOqK1F_jaVmSBelvBQ0vWhkFsvAat0y2TxxshusHQbj_9vAijZolZwH3Y659iP7nxTlvQzsPlH1WzdGbUu6kWFU_TA9ONHCSzD0r7-AqiHqco9CF-DwuMFk7X448n-Z20kj7kshTzy76MCv5okOo0bIgjIZ4r4ii2hYUjySqnCwBCPLeVKAbQ1pHEv_9q7qKjVtf-sMWTTxOMsJ8');"></div>
+</div>
+</div>
+</main>
+</body></html>
