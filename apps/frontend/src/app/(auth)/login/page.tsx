@@ -78,8 +78,7 @@ export default function LoginPage() {
           }}
         >
           <SignIn
-            routing="path"
-            path="/login"
+            routing="hash"
             appearance={{
               variables: {
                 colorPrimary: '#8B5CF6',

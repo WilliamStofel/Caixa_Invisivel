@@ -78,8 +78,7 @@ export default function RegisterPage() {
           }}
         >
           <SignUp
-            routing="path"
-            path="/register"
+            routing="hash"
             appearance={{
               variables: {
                 colorPrimary: '#8B5CF6',
