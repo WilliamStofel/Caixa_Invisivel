@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import { SignUp } from '@clerk/nextjs';
 
 export default function RegisterPage() {
   return (
@@ -76,260 +77,33 @@ export default function RegisterPage() {
             backdropFilter: 'blur(4px)',
           }}
         >
-          <form
-            style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}
-            onSubmit={(e) => {
-              e.preventDefault();
-              alert('Conta criada com sucesso!');
+          <SignUp
+            routing="path"
+            path="/register"
+            appearance={{
+              variables: {
+                colorPrimary: '#8B5CF6',
+                colorBackground: 'transparent',
+                colorText: '#F1F5F9',
+                colorInputText: '#F1F5F9',
+                colorInputBackground: '#0C0C24',
+              },
+              elements: {
+                card: 'bg-transparent shadow-none w-full max-w-full',
+                headerTitle: 'hidden',
+                headerSubtitle: 'hidden',
+                formButtonPrimary: 'bg-gradient-to-r from-indigo-800 to-purple-400 text-white font-bold py-4 rounded-lg',
+                formFieldInput: 'bg-[#0C0C24] border-slate-700/30 text-slate-100 p-3 rounded-lg',
+                formFieldLabel: 'text-slate-400 font-medium',
+                footerActionText: 'hidden',
+                footerActionLink: 'hidden'
+              }
             }}
-          >
-            {/* Name Field */}
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-              <label
-                htmlFor="name"
-                style={{
-                  fontFamily: '"Inter", sans-serif',
-                  fontSize: '12px',
-                  fontWeight: 500,
-                  color: '#94A3B8',
-                  marginLeft: '4px',
-                }}
-              >
-                Nome Completo
-              </label>
-              <input
-                id="name"
-                type="text"
-                placeholder="João Silva"
-                required
-                style={{
-                  width: '100%',
-                  backgroundColor: '#0C0C24',
-                  border: '1px solid rgba(51, 65, 85, 0.3)',
-                  color: '#F1F5F9',
-                  padding: '12px 16px',
-                  borderRadius: '8px',
-                  fontFamily: '"Inter", sans-serif',
-                  fontSize: '14px',
-                  transition: 'all 200ms',
-                  boxSizing: 'border-box',
-                  outline: 'none',
-                }}
-                onFocus={(e) => {
-                  e.currentTarget.style.borderColor = 'rgba(139, 92, 246, 0.5)';
-                  e.currentTarget.style.boxShadow = '0 0 0 2px rgba(139, 92, 246, 0.2)';
-                }}
-                onBlur={(e) => {
-                  e.currentTarget.style.borderColor = 'rgba(51, 65, 85, 0.3)';
-                  e.currentTarget.style.boxShadow = 'none';
-                }}
-              />
-            </div>
-
-            {/* Email Field */}
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-              <label
-                htmlFor="email"
-                style={{
-                  fontFamily: '"Inter", sans-serif',
-                  fontSize: '12px',
-                  fontWeight: 500,
-                  color: '#94A3B8',
-                  marginLeft: '4px',
-                }}
-              >
-                Email
-              </label>
-              <input
-                id="email"
-                type="email"
-                placeholder="nome@exemplo.com"
-                required
-                style={{
-                  width: '100%',
-                  backgroundColor: '#0C0C24',
-                  border: '1px solid rgba(51, 65, 85, 0.3)',
-                  color: '#F1F5F9',
-                  padding: '12px 16px',
-                  borderRadius: '8px',
-                  fontFamily: '"Inter", sans-serif',
-                  fontSize: '14px',
-                  transition: 'all 200ms',
-                  boxSizing: 'border-box',
-                  outline: 'none',
-                }}
-                onFocus={(e) => {
-                  e.currentTarget.style.borderColor = 'rgba(139, 92, 246, 0.5)';
-                  e.currentTarget.style.boxShadow = '0 0 0 2px rgba(139, 92, 246, 0.2)';
-                }}
-                onBlur={(e) => {
-                  e.currentTarget.style.borderColor = 'rgba(51, 65, 85, 0.3)';
-                  e.currentTarget.style.boxShadow = 'none';
-                }}
-              />
-            </div>
-
-            {/* Password Field */}
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-              <label
-                htmlFor="password"
-                style={{
-                  fontFamily: '"Inter", sans-serif',
-                  fontSize: '12px',
-                  fontWeight: 500,
-                  color: '#94A3B8',
-                  marginLeft: '4px',
-                }}
-              >
-                Senha
-              </label>
-              <input
-                id="password"
-                type="password"
-                placeholder="••••••••"
-                required
-                style={{
-                  width: '100%',
-                  backgroundColor: '#0C0C24',
-                  border: '1px solid rgba(51, 65, 85, 0.3)',
-                  color: '#F1F5F9',
-                  padding: '12px 16px',
-                  borderRadius: '8px',
-                  fontFamily: '"Inter", sans-serif',
-                  fontSize: '14px',
-                  transition: 'all 200ms',
-                  boxSizing: 'border-box',
-                  outline: 'none',
-                }}
-                onFocus={(e) => {
-                  e.currentTarget.style.borderColor = 'rgba(139, 92, 246, 0.5)';
-                  e.currentTarget.style.boxShadow = '0 0 0 2px rgba(139, 92, 246, 0.2)';
-                }}
-                onBlur={(e) => {
-                  e.currentTarget.style.borderColor = 'rgba(51, 65, 85, 0.3)';
-                  e.currentTarget.style.boxShadow = 'none';
-                }}
-              />
-            </div>
-
-            {/* Confirm Password Field */}
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-              <label
-                htmlFor="confirmPassword"
-                style={{
-                  fontFamily: '"Inter", sans-serif',
-                  fontSize: '12px',
-                  fontWeight: 500,
-                  color: '#94A3B8',
-                  marginLeft: '4px',
-                }}
-              >
-                Confirmar Senha
-              </label>
-              <input
-                id="confirmPassword"
-                type="password"
-                placeholder="••••••••"
-                required
-                style={{
-                  width: '100%',
-                  backgroundColor: '#0C0C24',
-                  border: '1px solid rgba(51, 65, 85, 0.3)',
-                  color: '#F1F5F9',
-                  padding: '12px 16px',
-                  borderRadius: '8px',
-                  fontFamily: '"Inter", sans-serif',
-                  fontSize: '14px',
-                  transition: 'all 200ms',
-                  boxSizing: 'border-box',
-                  outline: 'none',
-                }}
-                onFocus={(e) => {
-                  e.currentTarget.style.borderColor = 'rgba(139, 92, 246, 0.5)';
-                  e.currentTarget.style.boxShadow = '0 0 0 2px rgba(139, 92, 246, 0.2)';
-                }}
-                onBlur={(e) => {
-                  e.currentTarget.style.borderColor = 'rgba(51, 65, 85, 0.3)';
-                  e.currentTarget.style.boxShadow = 'none';
-                }}
-              />
-            </div>
-
-            {/* Terms Checkbox */}
-            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginTop: '8px' }}>
-              <input
-                id="terms"
-                type="checkbox"
-                required
-                style={{
-                  cursor: 'pointer',
-                  width: '18px',
-                  height: '18px',
-                  accentColor: '#8B5CF6',
-                }}
-              />
-              <label
-                htmlFor="terms"
-                style={{
-                  fontFamily: '"Inter", sans-serif',
-                  fontSize: '12px',
-                  color: '#cbc3d9',
-                  cursor: 'pointer',
-                }}
-              >
-                Concordo com os{' '}
-                <a
-                  href="#"
-                  style={{
-                    color: '#8B5CF6',
-                    textDecoration: 'none',
-                    fontWeight: 600,
-                  }}
-                >
-                  Termos de Serviço
-                </a>
-              </label>
-            </div>
-
-            {/* Submit Button */}
-            <button
-              type="submit"
-              style={{
-                width: '100%',
-                background: 'linear-gradient(135deg, #312E81 0%, #4338CA 35%, #7C3AED 70%, #C084FC 100%)',
-                color: 'white',
-                fontWeight: 700,
-                paddingTop: '16px',
-                paddingBottom: '16px',
-                borderRadius: '8px',
-                border: 'none',
-                cursor: 'pointer',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                gap: '8px',
-                fontFamily: '"Manrope", sans-serif',
-                fontSize: '14px',
-                letterSpacing: '-0.01em',
-                marginTop: '16px',
-                boxShadow: '0 8px 16px rgba(139, 92, 246, 0.2)',
-                transition: 'all 200ms',
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.boxShadow = '0 12px 24px rgba(139, 92, 246, 0.4)';
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.boxShadow = '0 8px 16px rgba(139, 92, 246, 0.2)';
-              }}
-            >
-              Criar Conta
-              <span style={{ fontSize: '16px' }}>→</span>
-            </button>
-          </form>
+          />
 
           {/* Divider */}
           <div style={{ position: 'relative', marginTop: '24px', marginBottom: '24px', display: 'flex', alignItems: 'center' }}>
-            <div style={{ flex: 1, borderTop: '1px solid rgba(51, 65, 85, 0.2)' }} />
+            <div style={{ flex: 1, borderTop: '1px solid rgba(45, 68, 100, 0.2)' }} />
             <span
               style={{
                 marginLeft: '16px',
