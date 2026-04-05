@@ -1,4 +1,5 @@
 'use client';
+import { SignIn } from '@clerk/nextjs';
 
 import Link from 'next/link';
 
@@ -76,152 +77,30 @@ export default function LoginPage() {
             backdropFilter: 'blur(4px)',
           }}
         >
-          <form
-            style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}
-            onSubmit={(e) => {
-              e.preventDefault();
-              alert('Login submitted!');
+          <SignIn
+            routing="path"
+            path="/login"
+            appearance={{
+              variables: {
+                colorPrimary: '#8B5CF6',
+                colorBackground: 'transparent',
+                colorText: '#F1F5F9',
+                colorInputText: '#F1F5F9',
+                colorInputBackground: '#0C0C24',
+              },
+              elements: {
+                card: 'bg-transparent shadow-none w-full max-w-full',
+                headerTitle: 'hidden',
+                headerSubtitle: 'hidden',
+                formButtonPrimary: 'bg-gradient-to-r from-indigo-800 to-purple-400 text-white font-bold py-4 rounded-lg',
+                formFieldInput: 'bg-[#0C0C24] border-slate-700/30 text-slate-100 p-3 rounded-lg',
+                formFieldLabel: 'text-slate-400 font-medium',
+                footerActionText: 'hidden',
+                footerActionLink: 'hidden'
+              }
             }}
-          >
-            {/* Email Field */}
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-              <label
-                htmlFor="email"
-                style={{
-                  fontFamily: '"Inter", sans-serif',
-                  fontSize: '12px',
-                  fontWeight: 500,
-                  color: '#94A3B8',
-                  marginLeft: '4px',
-                }}
-              >
-                Email
-              </label>
-              <div style={{ position: 'relative' }}>
-                <input
-                  id="email"
-                  type="email"
-                  placeholder="nome@exemplo.com"
-                  required
-                  style={{
-                    width: '100%',
-                    backgroundColor: '#0C0C24',
-                    border: '1px solid rgba(51, 65, 85, 0.3)',
-                    color: '#F1F5F9',
-                    padding: '12px 16px',
-                    borderRadius: '8px',
-                    fontFamily: '"Inter", sans-serif',
-                    fontSize: '14px',
-                    transition: 'all 200ms',
-                    boxSizing: 'border-box',
-                    outline: 'none',
-                  }}
-                  onFocus={(e) => {
-                    e.currentTarget.style.borderColor = 'rgba(139, 92, 246, 0.5)';
-                    e.currentTarget.style.boxShadow = '0 0 0 2px rgba(139, 92, 246, 0.2)';
-                  }}
-                  onBlur={(e) => {
-                    e.currentTarget.style.borderColor = 'rgba(51, 65, 85, 0.3)';
-                    e.currentTarget.style.boxShadow = 'none';
-                  }}
-                />
-              </div>
-            </div>
+          />
 
-            {/* Password Field */}
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginLeft: '4px', marginRight: '4px' }}>
-                <label
-                  htmlFor="password"
-                  style={{
-                    fontFamily: '"Inter", sans-serif',
-                    fontSize: '12px',
-                    fontWeight: 500,
-                    color: '#94A3B8',
-                  }}
-                >
-                  Senha
-                </label>
-                <a
-                  href="#"
-                  style={{
-                    fontSize: '12px',
-                    fontWeight: 600,
-                    color: '#8B5CF6',
-                    textDecoration: 'none',
-                    transition: 'color 200ms',
-                  }}
-                  onMouseEnter={(e) => (e.currentTarget.style.color = '#C7B2FF')}
-                  onMouseLeave={(e) => (e.currentTarget.style.color = '#8B5CF6')}
-                >
-                  Esqueci minha senha
-                </a>
-              </div>
-              <div style={{ position: 'relative' }}>
-                <input
-                  id="password"
-                  type="password"
-                  placeholder="••••••••"
-                  required
-                  style={{
-                    width: '100%',
-                    backgroundColor: '#0C0C24',
-                    border: '1px solid rgba(51, 65, 85, 0.3)',
-                    color: '#F1F5F9',
-                    padding: '12px 16px',
-                    borderRadius: '8px',
-                    fontFamily: '"Inter", sans-serif',
-                    fontSize: '14px',
-                    transition: 'all 200ms',
-                    boxSizing: 'border-box',
-                    outline: 'none',
-                  }}
-                  onFocus={(e) => {
-                    e.currentTarget.style.borderColor = 'rgba(139, 92, 246, 0.5)';
-                    e.currentTarget.style.boxShadow = '0 0 0 2px rgba(139, 92, 246, 0.2)';
-                  }}
-                  onBlur={(e) => {
-                    e.currentTarget.style.borderColor = 'rgba(51, 65, 85, 0.3)';
-                    e.currentTarget.style.boxShadow = 'none';
-                  }}
-                />
-              </div>
-            </div>
-
-            {/* Submit Button */}
-            <button
-              type="submit"
-              style={{
-                width: '100%',
-                background: 'linear-gradient(135deg, #312E81 0%, #4338CA 35%, #7C3AED 70%, #C084FC 100%)',
-                color: 'white',
-                fontWeight: 700,
-                paddingTop: '16px',
-                paddingBottom: '16px',
-                borderRadius: '8px',
-                border: 'none',
-                cursor: 'pointer',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                gap: '8px',
-                fontFamily: '"Manrope", sans-serif',
-                fontSize: '14px',
-                letterSpacing: '-0.01em',
-                boxShadow: '0 8px 16px rgba(139, 92, 246, 0.2)',
-                transition: 'all 200ms',
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.boxShadow = '0 12px 24px rgba(139, 92, 246, 0.4)';
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.boxShadow = '0 8px 16px rgba(139, 92, 246, 0.2)';
-              }}
-            >
-              Entrar
-              <span style={{ fontSize: '16px' }}>→</span>
-            </button>
-          </form>
 
           {/* Divider */}
           <div style={{ position: 'relative', marginTop: '40px', marginBottom: '40px', display: 'flex', alignItems: 'center' }}>
