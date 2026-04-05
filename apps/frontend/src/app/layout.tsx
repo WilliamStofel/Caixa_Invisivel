@@ -1,5 +1,7 @@
 import type { Metadata } from 'next';
 import './globals.css';
+import { ClerkProvider } from '@clerk/nextjs';
+import { AuthProvider } from '@/hooks/AuthContext';
 
 export const metadata: Metadata = {
   title: 'Caixa Invisível',
@@ -12,8 +14,12 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="pt-BR">
-      <body>{children}</body>
-    </html>
+    <ClerkProvider>
+      <AuthProvider>
+        <html lang="pt-BR">
+          <body>{children}</body>
+        </html>
+      </AuthProvider>
+    </ClerkProvider>
   );
 }

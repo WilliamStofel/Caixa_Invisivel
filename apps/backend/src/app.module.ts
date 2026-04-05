@@ -7,6 +7,7 @@ import { CustomersModule } from './modules/customers/customers.module';
 import { OrdersModule } from './modules/orders/orders.module';
 import { DatabaseModule } from './database/database.module';
 import { AuthModule } from './core/auth/auth.module';
+import { WebhooksModule } from './core/webhooks/webhooks.module';
 import { TenantInterceptor } from './core/interceptors/tenant.interceptor';
 
 @Module({
@@ -16,6 +17,7 @@ import { TenantInterceptor } from './core/interceptors/tenant.interceptor';
     OrdersModule,
     DatabaseModule,
     AuthModule,
+    WebhooksModule,
   ],
   controllers: [AppController],
   providers: [
