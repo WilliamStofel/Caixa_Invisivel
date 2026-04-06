@@ -248,7 +248,7 @@ export default function LoginPage() {
               lineHeight: 1.4,
             }}
           >
-            "A clareza financeira é o primeiro passo para a liberdade invisível."
+            &quot;A clareza financeira é o primeiro passo para a liberdade invisível.&quot;
           </p>
           <p
             style={{
