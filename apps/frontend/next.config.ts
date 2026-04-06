@@ -12,13 +12,14 @@ const nextConfig: NextConfig = {
   // No Docker, o standalone é obrigatório (veja Dockerfile).
   output: process.env.VERCEL ? undefined : 'standalone',
 
-  // No monorepo, o root do workspace é o diretório pai.
-  // AMBOS devem ter o mesmo valor ou ambos undefined para evitar conflitos.
-  // No Vercel, a plataforma gerencia o root automaticamente.
-  outputFileTracingRoot: process.env.VERCEL ? undefined : path.resolve(__dirname, "../.."),
-  turbopack: process.env.VERCEL ? undefined : {
-    root: path.resolve(__dirname, "../.."),
-  },
+  ...(process.env.VERCEL
+    ? {}
+    : {
+        outputFileTracingRoot: path.resolve(__dirname, '../..'),
+        turbopack: {
+          root: path.resolve(__dirname, '../..'),
+        },
+      }),
   images: {
     remotePatterns: [
       {
