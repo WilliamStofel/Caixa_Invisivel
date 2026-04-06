@@ -13,9 +13,10 @@ const nextConfig: NextConfig = {
   output: process.env.VERCEL ? undefined : 'standalone',
 
   // No monorepo, o root do workspace é o diretório pai.
-  // Mantemos consistência entre outputFileTracingRoot e turbopack.root para evitar avisos.
+  // AMBOS devem ter o mesmo valor ou ambos undefined para evitar conflitos.
+  // No Vercel, a plataforma gerencia o root automaticamente.
   outputFileTracingRoot: process.env.VERCEL ? undefined : path.resolve(__dirname, "../.."),
-  turbopack: {
+  turbopack: process.env.VERCEL ? undefined : {
     root: path.resolve(__dirname, "../.."),
   },
   images: {
