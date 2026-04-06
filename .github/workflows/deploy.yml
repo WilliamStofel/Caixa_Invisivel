@@ -66,7 +66,7 @@ jobs:
         run: npm install --global vercel@latest
 
       - name: Pull Vercel Environment Configuration
-        run: vercel pull --yes --environment=production --token=${{ secrets.VERCEL_TOKEN }} --project=${{ secrets.VERCEL_PROJECT_ID_FRONTEND }}
+        run: vercel pull --yes --environment=production --token=${{ secrets.VERCEL_TOKEN }} ./apps/frontend
 
       - name: Build Project Artifacts (Frontend)
         run: vercel build --prod --token=${{ secrets.VERCEL_TOKEN }} --cwd=apps/frontend
@@ -103,7 +103,7 @@ jobs:
         run: npm install --global vercel@latest
 
       - name: Pull Vercel Environment Configuration
-        run: vercel pull --yes --environment=production --token=${{ secrets.VERCEL_TOKEN }} --project=${{ secrets.VERCEL_PROJECT_ID_BACKEND }}
+        run: vercel pull --yes --environment=production --token=${{ secrets.VERCEL_TOKEN }} ./apps/backend
 
       - name: Build Project Artifacts (Backend)
         run: vercel build --prod --token=${{ secrets.VERCEL_TOKEN }} --cwd=apps/backend
