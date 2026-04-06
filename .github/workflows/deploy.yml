@@ -51,7 +51,6 @@ jobs:
     env:
       VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
       VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID_FRONTEND }}
-      VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
@@ -65,11 +64,29 @@ jobs:
       - name: Install Vercel CLI
         run: npm install --global vercel@latest
 
-      - name: Deploy to Vercel (Production)
-        run: vercel deploy --prod --token=${{ secrets.VERCEL_TOKEN }} --yes --cwd=apps/frontend
+      - name: Verify Secrets Are Set
+        run: |
+          echo "VERCEL_ORG_ID length: ${#VERCEL_ORG_ID}"
+          echo "VERCEL_PROJECT_ID length: ${#VERCEL_PROJECT_ID}"
+          echo "VERCEL_TOKEN length: ${#VERCEL_TOKEN}"
+          if [ -z "$VERCEL_ORG_ID" ]; then echo "❌ VERCEL_ORG_ID is EMPTY"; exit 1; fi
+          if [ -z "$VERCEL_PROJECT_ID" ]; then echo "❌ VERCEL_PROJECT_ID_FRONTEND is EMPTY"; exit 1; fi
+          if [ -z "$VERCEL_TOKEN" ]; then echo "❌ VERCEL_TOKEN is EMPTY"; exit 1; fi
+          echo "✅ All secrets are set"
         env:
-          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
-          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID_FRONTEND }}
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+
+      - name: Pull Vercel Environment
+        run: vercel pull --yes --environment=production --token=${{ secrets.VERCEL_TOKEN }}
+        working-directory: apps/frontend
+
+      - name: Build Project Artifacts
+        run: vercel build --prod --token=${{ secrets.VERCEL_TOKEN }}
+        working-directory: apps/frontend
+
+      - name: Deploy to Vercel (Production)
+        run: vercel deploy --prebuilt --prod --token=${{ secrets.VERCEL_TOKEN }}
+        working-directory: apps/frontend
 
   # ---------------------------------------------------------
   # ETAPA DE BUILD E DEPLOY: BACKEND
@@ -81,7 +98,6 @@ jobs:
     env:
       VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
       VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID_BACKEND }}
-      VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
@@ -95,11 +111,29 @@ jobs:
       - name: Install Vercel CLI
         run: npm install --global vercel@latest
 
-      - name: Deploy to Vercel (Production)
-        run: vercel deploy --prod --token=${{ secrets.VERCEL_TOKEN }} --yes --cwd=apps/backend
+      - name: Verify Secrets Are Set
+        run: |
+          echo "VERCEL_ORG_ID length: ${#VERCEL_ORG_ID}"
+          echo "VERCEL_PROJECT_ID length: ${#VERCEL_PROJECT_ID}"
+          echo "VERCEL_TOKEN length: ${#VERCEL_TOKEN}"
+          if [ -z "$VERCEL_ORG_ID" ]; then echo "❌ VERCEL_ORG_ID is EMPTY"; exit 1; fi
+          if [ -z "$VERCEL_PROJECT_ID" ]; then echo "❌ VERCEL_PROJECT_ID_BACKEND is EMPTY"; exit 1; fi
+          if [ -z "$VERCEL_TOKEN" ]; then echo "❌ VERCEL_TOKEN is EMPTY"; exit 1; fi
+          echo "✅ All secrets are set"
         env:
-          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
-          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID_BACKEND }}
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+
+      - name: Pull Vercel Environment
+        run: vercel pull --yes --environment=production --token=${{ secrets.VERCEL_TOKEN }}
+        working-directory: apps/backend
+
+      - name: Build Project Artifacts
+        run: vercel build --prod --token=${{ secrets.VERCEL_TOKEN }}
+        working-directory: apps/backend
+
+      - name: Deploy to Vercel (Production)
+        run: vercel deploy --prebuilt --prod --token=${{ secrets.VERCEL_TOKEN }}
+        working-directory: apps/backend
 
   # ---------------------------------------------------------
   # ETAPA FINAL: NOTIFICAÇÃO (OPCIONAL/MOCK)
